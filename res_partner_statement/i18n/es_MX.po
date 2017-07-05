@@ -1,0 +1,284 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* res_partner_statement
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 9.0e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-06-27 23:30+0000\n"
+"PO-Revision-Date: 2017-06-27 23:30+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: res_partner_statement
+#: model:ir.ui.view,arch_db:res_partner_statement.partner_statement_report_template
+msgid "<span>\n"
+"                                                <strong>Period: </strong>\n"
+"                                            </span>"
+msgstr "<span>\n"
+"                                                <strong>Periodo: </strong>\n"
+"                                            </span>"
+
+#. module: res_partner_statement
+#: model:ir.ui.view,arch_db:res_partner_statement.partner_statement_report_template
+msgid "<strong>Currency: </strong>"
+msgstr "<strong>Moneda: </strong>"
+
+#. module: res_partner_statement
+#: model:ir.ui.view,arch_db:res_partner_statement.partner_statement_report_template
+msgid "Address"
+msgstr "Dirección"
+
+#. module: res_partner_statement
+#: model:ir.ui.view,arch_db:res_partner_statement.view_partner_statement
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: res_partner_statement
+#: model:ir.ui.view,arch_db:res_partner_statement.partner_statement_report_template
+msgid "City"
+msgstr "Ciudad"
+
+#. module: res_partner_statement
+#: model:ir.ui.view,arch_db:res_partner_statement.partner_statement_report_template
+msgid "Colony"
+msgstr "Colonia"
+
+#. module: res_partner_statement
+#: model:ir.model.fields,field_description:res_partner_statement.field_partner_statement_wizard_company_id
+msgid "Company"
+msgstr "Compañía"
+
+#. module: res_partner_statement
+#: model:ir.actions.act_window,name:res_partner_statement.action_report_partner_statement
+msgid "Create Partner Statement"
+msgstr "Crear Estado de Cuenta"
+
+#. module: res_partner_statement
+#: model:ir.model.fields,field_description:res_partner_statement.field_partner_statement_wizard_create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: res_partner_statement
+#: model:ir.model.fields,field_description:res_partner_statement.field_partner_statement_wizard_create_date
+msgid "Created on"
+msgstr "Creado en"
+
+#. module: res_partner_statement
+#: model:ir.model.fields,field_description:res_partner_statement.field_partner_statement_wizard_currency_id
+msgid "Currency"
+msgstr "Dinero corriente"
+
+#. module: res_partner_statement
+#: code:addons/res_partner_statement/wizard/partner_statement_wizard.py:43
+#, python-format
+msgid "Customer"
+msgstr "Cliente"
+
+#. module: res_partner_statement
+#: model:ir.ui.view,arch_db:res_partner_statement.partner_statement_report_template
+msgid "Customer Statement"
+msgstr "Estado de Cuenta de Clientes"
+
+#. module: res_partner_statement
+#: model:ir.ui.view,arch_db:res_partner_statement.partner_statement_report_template
+msgid "Date Due"
+msgstr "Fecha de Vencimiento"
+
+#. module: res_partner_statement
+#: model:ir.ui.view,arch_db:res_partner_statement.partner_statement_report_template
+msgid "Date Exp"
+msgstr "Fecha Exp"
+
+#. module: res_partner_statement
+#: model:ir.model.fields,field_description:res_partner_statement.field_partner_statement_wizard_date_end
+msgid "Date end"
+msgstr "Fecha Fin"
+
+#. module: res_partner_statement
+#: model:ir.model.fields,field_description:res_partner_statement.field_partner_statement_wizard_date_start
+msgid "Date start"
+msgstr "Fecha Inicio"
+
+#. module: res_partner_statement
+#: model:ir.model.fields,field_description:res_partner_statement.field_partner_statement_wizard_display_name
+msgid "Display Name"
+msgstr "Nombre desplegado"
+
+#. module: res_partner_statement
+#: model:ir.ui.view,arch_db:res_partner_statement.partner_statement_report_template
+msgid "Document"
+msgstr "Documento"
+
+#. module: res_partner_statement
+#: model:ir.model.fields,field_description:res_partner_statement.field_partner_statement_wizard_id
+msgid "ID"
+msgstr "ID"
+
+#. module: res_partner_statement
+#: code:addons/res_partner_statement/wizard/partner_statement_wizard.py:101
+#: code:addons/res_partner_statement/wizard/partner_statement_wizard.py:108
+#: code:addons/res_partner_statement/wizard/partner_statement_wizard.py:165
+#, python-format
+msgid "Invoice"
+msgstr "Factura"
+
+#. module: res_partner_statement
+#: model:ir.ui.view,arch_db:res_partner_statement.partner_statement_report_template
+msgid "Invoices Total - IVA:"
+msgstr "Total Facturas - IVA:"
+
+#. module: res_partner_statement
+#: model:ir.ui.view,arch_db:res_partner_statement.partner_statement_report_template
+msgid "Invoices Total:"
+msgstr "Total Facturas:"
+
+#. module: res_partner_statement
+#: model:ir.model.fields,field_description:res_partner_statement.field_partner_statement_wizard___last_update
+msgid "Last Modified on"
+msgstr "Ultima modificacion realizada"
+
+#. module: res_partner_statement
+#: model:ir.model.fields,field_description:res_partner_statement.field_partner_statement_wizard_write_uid
+msgid "Last Updated by"
+msgstr "Ultima actualizacion por"
+
+#. module: res_partner_statement
+#: model:ir.model.fields,field_description:res_partner_statement.field_partner_statement_wizard_write_date
+msgid "Last Updated on"
+msgstr "Ultima actualización realizada"
+
+#. module: res_partner_statement
+#: model:ir.ui.view,arch_db:res_partner_statement.partner_statement_report_template
+msgid "Name Partner"
+msgstr "Cliente"
+
+#. module: res_partner_statement
+#: code:addons/res_partner_statement/wizard/partner_statement_wizard.py:90
+#, python-format
+msgid "No results with requested information \n"
+"Please check!"
+msgstr "No se han encontrado resultados. \n"
+"Por favor compruebe sus datos."
+
+#. module: res_partner_statement
+#: model:ir.ui.view,arch_db:res_partner_statement.partner_statement_report_template
+msgid "Number"
+msgstr "Número"
+
+#. module: res_partner_statement
+#: model:ir.actions.report.xml,name:res_partner_statement.action_partner_statement
+msgid "Partner Statement"
+msgstr "Partner Statement"
+
+#. module: res_partner_statement
+#: model:ir.model.fields,field_description:res_partner_statement.field_partner_statement_wizard_partner_ids
+msgid "Partners"
+msgstr "Empresas"
+
+#. module: res_partner_statement
+#: code:addons/res_partner_statement/wizard/partner_statement_wizard.py:120
+#: code:addons/res_partner_statement/wizard/partner_statement_wizard.py:169
+#: code:addons/res_partner_statement/wizard/partner_statement_wizard.py:181
+#, python-format
+msgid "Payment"
+msgstr "Abono Cliente"
+
+#. module: res_partner_statement
+#: model:ir.ui.view,arch_db:res_partner_statement.partner_statement_report_template
+msgid "Payments"
+msgstr "Pagos"
+
+#. module: res_partner_statement
+#: model:ir.ui.view,arch_db:res_partner_statement.view_partner_statement
+msgid "Period:"
+msgstr "Periodo:"
+
+#. module: res_partner_statement
+#: model:ir.ui.view,arch_db:res_partner_statement.view_partner_statement
+msgid "Print"
+msgstr "Imprimir"
+
+#. module: res_partner_statement
+#: model:ir.ui.view,arch_db:res_partner_statement.partner_statement_report_template
+msgid "Reference"
+msgstr "Referencia"
+
+#. module: res_partner_statement
+#: code:addons/res_partner_statement/wizard/partner_statement_wizard.py:101
+#: code:addons/res_partner_statement/wizard/partner_statement_wizard.py:102
+#: code:addons/res_partner_statement/wizard/partner_statement_wizard.py:162
+#, python-format
+msgid "Refund"
+msgstr "N. Crédito"
+
+#. module: res_partner_statement
+#: model:ir.ui.view,arch_db:res_partner_statement.partner_statement_report_template
+msgid "Refunds Total - IVA:"
+msgstr "Total Notas de Crédito - IVA:"
+
+#. module: res_partner_statement
+#: model:ir.ui.view,arch_db:res_partner_statement.partner_statement_report_template
+msgid "Refunds Total:"
+msgstr "Total Notas de Crédito:"
+
+#. module: res_partner_statement
+#: model:ir.ui.view,arch_db:res_partner_statement.partner_statement_report_template
+msgid "SALES TOTAL:"
+msgstr "TOTAL VENTAS:"
+
+#. module: res_partner_statement
+#: model:ir.ui.view,arch_db:res_partner_statement.partner_statement_report_template
+msgid "Sales"
+msgstr "Ventas"
+
+#. module: res_partner_statement
+#: model:ir.ui.view,arch_db:res_partner_statement.partner_statement_report_template
+msgid "State"
+msgstr "Estado"
+
+#. module: res_partner_statement
+#: model:ir.model.fields,field_description:res_partner_statement.field_partner_statement_wizard_type_report
+msgid "Statement Type"
+msgstr "Estado de Cuenta de: "
+
+#. module: res_partner_statement
+#: model:ir.ui.view,arch_db:res_partner_statement.partner_statement_report_template
+msgid "Subtotal:"
+msgstr "Subtotal:"
+
+#. module: res_partner_statement
+#: code:addons/res_partner_statement/wizard/partner_statement_wizard.py:45
+#, python-format
+msgid "Supplier"
+msgstr "Proveedor"
+
+#. module: res_partner_statement
+#: model:ir.ui.view,arch_db:res_partner_statement.partner_statement_report_template
+msgid "Supplier Statement"
+msgstr "Estado de Cuenta de Provedores"
+
+#. module: res_partner_statement
+#: model:ir.ui.view,arch_db:res_partner_statement.partner_statement_report_template
+msgid "Total"
+msgstr "Total"
+
+#. module: res_partner_statement
+#: model:ir.ui.view,arch_db:res_partner_statement.partner_statement_report_template
+msgid "Total:"
+msgstr "Total:"
+
+#. module: res_partner_statement
+#: model:ir.model,name:res_partner_statement.model_partner_statement_wizard
+msgid "partner.statement.wizard"
+msgstr "partner.statement.wizard"
+
+#. module: res_partner_statement
+#: model:ir.ui.view,arch_db:res_partner_statement.view_partner_statement
+msgid "to"
+msgstr "hasta"
