@@ -9,7 +9,7 @@ class AccountMove(models.Model):
     _inherit = 'account.move'
 
     nbr_moves = fields.Float(
-        string=_('Tax Moves'), compute="_compute_nbr_moves",
+        string='Tax Moves', compute="_compute_nbr_moves",
         default=0,)
     account_move_ids = fields.One2many(
         'account.move',
