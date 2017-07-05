@@ -32,7 +32,7 @@ class AccountPartialReconcileCashBasis(models.Model):
             tax_accounts.append(tax.cash_basis_account)
             tax_accounts.append(tax.account_id)
             tax_accounts.append(tax.refund_account_id)
-        for index in range(len(lines)):
+        for index, value in enumerate(lines):
             vals = lines[index][2]
             line_account_id = self.env['account.account'].browse(
                 vals['account_id'])
@@ -45,7 +45,7 @@ class AccountPartialReconcileCashBasis(models.Model):
                 lines[index] = (0, 0, vals)
 
         # We remove the trash moves because we only need the tax moves
-        for index in range(len(lines_to_unlink)):
+        for index, value in enumerate(lines_to_unlink):
             lines.remove(lines_to_unlink[index])
         return lines, move_date
 
@@ -54,7 +54,7 @@ class AccountPartialReconcileCashBasis(models.Model):
             value_before_reconciliation)
         tax_move = False
         ref = False
-        if len(line_to_create) > 0:
+        if line_to_create:
             if not self.company_id.tax_cash_basis_journal_id:
                 raise UserError(
                     _('There is no tax cash basis journal defined '
