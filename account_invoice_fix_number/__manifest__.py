@@ -4,7 +4,7 @@
 
 {
     "name": "Accounting - Invoice Fix Number",
-    "version": "9.0.0.1.0",
+    "version": "10.0.0.1.0",
     "category": "Accounting",
     "author": "Jarsa Sistemas",
     "website": "https://www.jarsa.com.mx",
