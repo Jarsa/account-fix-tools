@@ -18,6 +18,7 @@
         'stock',
     ],
     "data": [
+        'data/paperformat.xml',
         'wizard/partner_statement_wizard_view.xml',
         'views/config_report.xml',
         'report/partner_statement_report_template.xml',

@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <odoo>
     <template id="partner_statement_report_template">
         <t t-call="report.html_container">
@@ -137,7 +136,7 @@
                                         <span t-esc="doc._get_amount(payments_subtotal)"/>
                                     </td>
                                     <td>
-                                        <span t-esc="doc._get_amount(values[1]['balance'])"/>
+              carbotecnia_partner_statement                          <span t-esc="doc._get_amount(values[1]['balance'])"/>
                                     </td>
                                 </tr>
                             </table>

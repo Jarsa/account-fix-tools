@@ -3,7 +3,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from __future__ import division
-from odoo import _, api, models
+from odoo import _, models
 
 
 class AccountPartialReconcileCashBasis(models.Model):
@@ -20,9 +20,9 @@ class AccountPartialReconcileCashBasis(models.Model):
             move = line_to_reconcile.move_id
             # We get the invoice and the payment move
             invoice_move = (
-                    rec.credit_move_id if
-                    rec.credit_move_id.journal_id.type == 'purchase' else
-                    rec.debit_move_id)
+                rec.credit_move_id if
+                rec.credit_move_id.journal_id.type == 'purchase' else
+                rec.debit_move_id)
             bank_move = (
                 rec.debit_move_id.move_id if
                 rec.credit_move_id.journal_id.type == 'purchase' else
