@@ -5,10 +5,10 @@
 {
     "name": "Partner Statement",
     "summary": "Description",
-    "version": "9.0.1.0.0",
+    "version": "10.0.1.0.0",
     "category": "Hidden",
     "website": "https://www.jarsa.com.mx/",
-    "author": "JARSA Sistemas, S.A. de C.V.",
+    "author": "Jarsa Sistemas",
     "license": "AGPL-3",
     "installable": True,
     "depends": [

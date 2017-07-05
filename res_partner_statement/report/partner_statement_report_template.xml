@@ -1,192 +1,191 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <odoo>
-    <data>
-        <template id="partner_statement_report_template">
-            <t t-call="report.html_container">
-                <t t-as="doc" t-foreach="docs">
-                    <t t-as="partner" t-foreach="doc.partner_ids">
-                        <div class="page">
-                            <div class="row" style="font-size:14px;">
-                                <div class="col-xs-4">
-                                    <img style="max-height:104px; max-width:220px;" t-att-src="'data:image/png;base64,%s' % partner.company_id.logo" t-if="partner.company_id.logo"/>
-                                </div>
-                                <div class="col-xs-4 text-center">
-                                    <strong>
-                                        <span t-field="partner.company_id.partner_id.name"/>
-                                        <br/>
-                                        <span t-field="partner.company_id.partner_id.street"/>
-                                        <br/>
-                                        <span t-field="partner.company_id.partner_id.street2"/>
-                                        <span t-field="partner.company_id.partner_id.city"/>
-                                    </strong>
-                                </div>
-                                <div class="col-xs-4">
-                                    <h3 class="text-center" style="padding-top:25px;">
-                                        <t t-if="doc.type_report == 'out_invoice'">Customer Statement
-                                    </t>
-                                        <t t-if="doc.type_report == 'in_invoice'">Supplier Statement
-                                    </t>
-                                    </h3>
-                                </div>
+    <template id="partner_statement_report_template">
+        <t t-call="report.html_container">
+            <t t-as="doc" t-foreach="docs">
+                <t t-as="partner" t-foreach="doc.partner_ids">
+                    <div class="page">
+                        <div class="row" style="font-size:14px;">
+                            <div class="col-xs-4">
+                                <img style="max-height:104px; max-width:220px;" t-att-src="'data:image/png;base64,%s' % partner.company_id.logo" t-if="partner.company_id.logo"/>
                             </div>
-                            <div class="row">
-                                <hr style="display: block; border-width: 1px;"/>
+                            <div class="col-xs-4 text-center">
+                                <strong>
+                                    <span t-field="partner.company_id.partner_id.name"/>
+                                    <br/>
+                                    <span t-field="partner.company_id.partner_id.street"/>
+                                    <br/>
+                                    <span t-field="partner.company_id.partner_id.street2"/>
+                                    <span t-field="partner.company_id.partner_id.city"/>
+                                </strong>
                             </div>
-                            <div class="row">
-                                <table width="100%">
-                                    <tr>
-                                        <th width="20%">
-                                            <strong>Currency: </strong>
-                                        </th>
-                                        <td width="30%">
-                                            <span t-esc="doc.currency_id.name"/>
-                                        </td>
-                                        <th width="20%">
-                                            <span>
-                                                <strong>Period: </strong>
-                                            </span>
-                                        </th>
-                                        <td width="30%">
-                                            <span t-esc="doc.convert_date(doc.date_start)"/>
-                                            <span>- </span>
-                                            <span t-esc="doc.convert_date(doc.date_end)"/>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                            <br/>
-                            <div class="row" style="font-size:11px;">
-                                <table class="table table-condensed">
-                                    <tr style="background-color: #5FBAF7; color:#FFFFFF; font-size: 14px;">
-                                        <th>Name Partner</th>
-                                        <th>Address</th>
-                                        <th>Colony</th>
-                                        <th>City</th>
-                                        <th>State</th>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <span t-esc="partner.name"/>
-                                        </td>
-                                        <td>
-                                            <span t-esc="partner.street"/>
-                                        </td>
-                                        <td>
-                                            <span t-esc="partner.street2"/>
-                                        </td>
-                                        <td>
-                                            <span t-esc="partner.city"/>
-                                        </td>
-                                        <td>
-                                            <span t-esc="partner.state_id.name"/>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                            <div class="row">
-                                <table class="table table-condensed" style="font-size:11px;">
-                                    <tr style="background-color: #5FBAF7; color:#FFFFFF; font-size: 14px;">
-                                        <th>Document</th>
-                                        <th>Number</th>
-                                        <th>Reference</th>
-                                        <th>Date Exp</th>
-                                        <th>Date Due</th>
-                                        <th>Sales</th>
-                                        <th>Payments</th>
-                                        <th>Total</th>
-                                    </tr>
-                                    <t t-set="sales_subtotal" t-value="0.0"/>
-                                    <t t-set="payments_subtotal" t-value="0.0"/>
-                                    <t t-set="values" t-value="doc._get_lines_print(partner)"/>
-                                    <tr t-as="line" t-foreach="values[0]">
-                                        <t t-if="line">
-                                            <t t-set="sales_subtotal" t-value="sales_subtotal + float(line[&quot;sales&quot;])"/>
-                                            <t t-set="payments_subtotal" t-value="payments_subtotal + float(line['payment'])"/>
-                                            <td>
-                                                <span t-esc="line['document']"/>
-                                            </td>
-                                            <td>
-                                                <span t-esc="line['number']"/>
-                                            </td>
-                                            <td>
-                                                <span t-esc="line['ref']"/>
-                                            </td>
-                                            <td>
-                                                <span t-esc="line['date_exp']"/>
-                                            </td>
-                                            <td>
-                                                <span t-esc="line['date_ven']"/>
-                                            </td>
-                                            <td>
-                                                <span t-esc="doc._get_amount(line['sales']) if line['sales'] != 0.0 else ''"/>
-                                            </td>
-                                            <td>
-                                                <span t-esc="doc._get_amount(line['payment']) if line['payment'] != 0.0 else ''"/>
-                                            </td>
-                                            <td>
-                                                <span t-esc="doc._get_amount(line['total'])"/>
-                                            </td>
-                                        </t>
-                                    </tr>
-                                    <tr>
-                                        <th class="text-right" colspan="5">Total:</th>
-                                        <td>
-                                            <span t-esc="doc._get_amount(sales_subtotal)"/>
-                                        </td>
-                                        <td>
-                                            <span t-esc="doc._get_amount(payments_subtotal)"/>
-                                        </td>
-                                        <td>
-                                            <span t-esc="doc._get_amount(values[1]['balance'])"/>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                            <div class="row" style="font-size:11px;">
-                                <div class="col-xs-4">
-                                    <table class="table-condensed">
-                                        <tr>
-                                            <th>Invoices Total:</th>
-                                            <td>
-                                                <span t-esc="doc._get_amount(values[1]['invoices_total'])"/>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>Refunds Total:</th>
-                                            <td>
-                                                <span t-esc="doc._get_amount(values[1]['refunds_total'])"/>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </div>
-                                <div class="col-xs-4">
-                                    <table class="table-condensed">
-                                        <tr>
-                                            <th>Invoices Total - IVA:</th>
-                                            <td>
-                                                <span t-esc="doc._get_amount(values[1]['invoices_subtotal'])"/>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>Refunds Total - IVA:</th>
-                                            <td>
-                                                <span t-esc="doc._get_amount(values[1]['refunds_subtotal'])"/>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>SALES TOTAL:</th>
-                                            <td>
-                                                <span t-esc="doc._get_amount(values[1]['sales_total'])"/>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </div>
-                                <div class="col-xs-4"/>
+                            <div class="col-xs-4">
+                                <h3 class="text-center" style="padding-top:25px;">
+                                    <t t-if="doc.type_report == 'out_invoice'">Customer Statement
+                                </t>
+                                    <t t-if="doc.type_report == 'in_invoice'">Supplier Statement
+                                </t>
+                                </h3>
                             </div>
                         </div>
-                    </t>
+                        <div class="row">
+                            <hr style="display: block; border-width: 1px;"/>
+                        </div>
+                        <div class="row">
+                            <table width="100%">
+                                <tr>
+                                    <th width="20%">
+                                        <strong>Currency: </strong>
+                                    </th>
+                                    <td width="30%">
+                                        <span t-esc="doc.currency_id.name"/>
+                                    </td>
+                                    <th width="20%">
+                                        <span>
+                                            <strong>Period: </strong>
+                                        </span>
+                                    </th>
+                                    <td width="30%">
+                                        <span t-esc="doc.convert_date(doc.date_start)"/>
+                                        <span>- </span>
+                                        <span t-esc="doc.convert_date(doc.date_end)"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <br/>
+                        <div class="row" style="font-size:11px;">
+                            <table class="table table-condensed">
+                                <tr style="background-color: #5FBAF7; color:#FFFFFF; font-size: 14px;">
+                                    <th>Name Partner</th>
+                                    <th>Address</th>
+                                    <th>Colony</th>
+                                    <th>City</th>
+                                    <th>State</th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span t-esc="partner.name"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="partner.street"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="partner.street2"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="partner.city"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="partner.state_id.name"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="row">
+                            <table class="table table-condensed" style="font-size:11px;">
+                                <tr style="background-color: #5FBAF7; color:#FFFFFF; font-size: 14px;">
+                                    <th>Document</th>
+                                    <th>Number</th>
+                                    <th>Reference</th>
+                                    <th>Date Exp</th>
+                                    <th>Date Due</th>
+                                    <th>Sales</th>
+                                    <th>Payments</th>
+                                    <th>Total</th>
+                                </tr>
+                                <t t-set="sales_subtotal" t-value="0.0"/>
+                                <t t-set="payments_subtotal" t-value="0.0"/>
+                                <t t-set="values" t-value="doc._get_lines_print(partner)"/>
+                                <tr t-as="line" t-foreach="values[0]">
+                                    <t t-if="line">
+                                        <t t-set="sales_subtotal" t-value="sales_subtotal + float(line[&quot;sales&quot;])"/>
+                                        <t t-set="payments_subtotal" t-value="payments_subtotal + float(line['payment'])"/>
+                                        <td>
+                                            <span t-esc="line['document']"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="line['number']"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="line['ref']"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="line['date_exp']"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="line['date_ven']"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="doc._get_amount(line['sales']) if line['sales'] != 0.0 else ''"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="doc._get_amount(line['payment']) if line['payment'] != 0.0 else ''"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="doc._get_amount(line['total'])"/>
+                                        </td>
+                                    </t>
+                                </tr>
+                                <tr>
+                                    <th class="text-right" colspan="5">Total:</th>
+                                    <td>
+                                        <span t-esc="doc._get_amount(sales_subtotal)"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="doc._get_amount(payments_subtotal)"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="doc._get_amount(values[1]['balance'])"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="row" style="font-size:11px;">
+                            <div class="col-xs-4">
+                                <table class="table-condensed">
+                                    <tr>
+                                        <th>Invoices Total:</th>
+                                        <td>
+                                            <span t-esc="doc._get_amount(values[1]['invoices_total'])"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Refunds Total:</th>
+                                        <td>
+                                            <span t-esc="doc._get_amount(values[1]['refunds_total'])"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-xs-4">
+                                <table class="table-condensed">
+                                    <tr>
+                                        <th>Invoices Total - IVA:</th>
+                                        <td>
+                                            <span t-esc="doc._get_amount(values[1]['invoices_subtotal'])"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Refunds Total - IVA:</th>
+                                        <td>
+                                            <span t-esc="doc._get_amount(values[1]['refunds_subtotal'])"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>SALES TOTAL:</th>
+                                        <td>
+                                            <span t-esc="doc._get_amount(values[1]['sales_total'])"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-xs-4"/>
+                        </div>
+                    </div>
                 </t>
             </t>
-        </template>
-    </data>
+        </t>
+    </template>
 </odoo>
