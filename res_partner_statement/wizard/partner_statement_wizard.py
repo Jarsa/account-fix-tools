@@ -66,12 +66,12 @@ class PartnerStatementWizard(models.TransientModel):
         else:
             types = ['in_invoice', 'in_refund']
         invoices = self.env['account.invoice'].search([
-                ('partner_id', '=', partner),
-                ('date_invoice', '>=', start_period),
-                ('date_invoice', '<=', end_period),
-                ('currency_id', '=', self.currency_id.id),
-                ('type', 'in', types),
-                ('state', 'in', ['open', 'paid'])], order="date_invoice, id")
+            ('partner_id', '=', partner),
+            ('date_invoice', '>=', start_period),
+            ('date_invoice', '<=', end_period),
+            ('currency_id', '=', self.currency_id.id),
+            ('type', 'in', types),
+            ('state', 'in', ['open', 'paid'])], order="date_invoice, id")
         return invoices
 
     @api.multi
@@ -203,4 +203,4 @@ class PartnerStatementWizard(models.TransientModel):
         totals['sales_total'] = (
             totals['invoices_subtotal'] - totals['refunds_subtotal'])
         lines[1] = totals
-    return lines
+        return lines

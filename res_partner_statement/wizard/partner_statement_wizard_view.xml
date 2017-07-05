@@ -4,7 +4,7 @@
         <field name="name">Partner Statement</field>
         <field name="model">partner.statement.wizard</field>
         <field name="arch" type="xml">
-            <form version="9.0">
+            <form>
                 <sheet>
                     <group colspan="2">
                         <group>
