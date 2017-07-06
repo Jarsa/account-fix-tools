@@ -6,6 +6,7 @@
     "name": "Accounting - Invoice Fix Number",
     "version": "9.0.0.1.0",
     "category": "Accounting",
+    "description": "This module add a new field to keep the invoice number",
     "author": "Jarsa Sistemas",
     "website": "https://www.jarsa.com.mx",
     "depends": ["account"],

@@ -23,9 +23,9 @@
                                 <div class="col-xs-4">
                                     <h3 class="text-center" style="padding-top:25px;">
                                         <t t-if="doc.type_report == 'out_invoice'">Customer Statement
-                                    </t>
+                                        </t>
                                         <t t-if="doc.type_report == 'in_invoice'">Supplier Statement
-                                    </t>
+                                        </t>
                                     </h3>
                                 </div>
                             </div>

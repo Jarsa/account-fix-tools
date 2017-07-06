@@ -7,6 +7,7 @@
     "version": "9.0.0.1.0",
     "category": "Accounting",
     "author": "Jarsa Sistemas",
+    "description": "This module add ten decimals to the res currency rates.",
     "website": "https://www.jarsa.com.mx",
     "depends": ["account"],
     "summary": ("This module add 10 decimals to the res currency rates"),

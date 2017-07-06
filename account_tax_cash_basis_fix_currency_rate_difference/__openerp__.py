@@ -9,6 +9,9 @@
     "author": "Jarsa Sistemas",
     "website": "https://www.jarsa.com.mx",
     "depends": ["account_tax_cash_basis"],
+    "description": (
+        "This module fix the exchange currency rate difference with"
+        "cash basis behabior."),
     "summary": (
         "This module add the name of the invoice name"
         " to the exchange reference journal entry and fix "
