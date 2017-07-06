@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
     <report
-        file="res_partner_statement.partner_statement_report_template"
-        id="action_partner_statement" model="partner.statement.wizard"
-        name="res_partner_statement.partner_statement_report_template"
-        paperformat_id="res_partner_statement.status_paperformat"
-        report_type="qweb-pdf"
+        id="action_partner_statement"
+        model="partner.statement.wizard"
         string="Partner Statement"
+        report_type="qweb-pdf"
+        name="res_partner_statement.partner_statement_report_template"
+        file="res_partner_statement.partner_statement_report_template"
     />
+    <record id="action_partner_statement" model="ir.actions.report.xml">
+        <field name="paperformat_id" ref="res_partner_statement.status_paperformat"/>
+    </record>
     <template id="partner_statement_report_template_translate">
         <t t-call="report.html_container">
             <t t-as="doc_id" t-foreach="doc_ids">

@@ -136,7 +136,7 @@
                                         <span t-esc="doc._get_amount(payments_subtotal)"/>
                                     </td>
                                     <td>
-              carbotecnia_partner_statement                          <span t-esc="doc._get_amount(values[1]['balance'])"/>
+                                        <span t-esc="doc._get_amount(values[1]['balance'])"/>
                                     </td>
                                 </tr>
                             </table>
