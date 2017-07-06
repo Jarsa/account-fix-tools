@@ -9,6 +9,8 @@
     "author": "Jarsa Sistemas",
     "website": "https://www.jarsa.com.mx",
     "depends": ["account_tax_exigible"],
+    "description": (
+        "This module add the tax moves to the invoice journal entry."),
     "summary": "This module assign the tax moves to the invoice moves",
     "license": "AGPL-3",
     "data": [

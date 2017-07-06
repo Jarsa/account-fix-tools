@@ -2,11 +2,10 @@
 # Copyright 2017, Jarsa Sistemas, S.A. de C.V.
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-
-from openerp import _, api, fields, models
+from datetime import timedelta, datetime
+from openerp import api, fields, models
 from openerp.exceptions import ValidationError
 from openerp.tools.translate import _
-from datetime import timedelta, datetime
 
 
 class PartnerStatementWizard(models.TransientModel):
@@ -47,8 +46,8 @@ class PartnerStatementWizard(models.TransientModel):
         return selection_types
 
     @api.model
-    def default_get(self, fields):
-        res = super(PartnerStatementWizard, self).default_get(fields)
+    def default_get(self, field_list):
+        res = super(PartnerStatementWizard, self).default_get(field_list)
         types = self.get_types()
         if len(types) == 1:
             res['type_report'] = types[0][0]
@@ -67,12 +66,12 @@ class PartnerStatementWizard(models.TransientModel):
         else:
             types = ['in_invoice', 'in_refund']
         invoices = self.env['account.invoice'].search([
-                ('partner_id', '=', partner),
-                ('date_invoice', '>=', start_period),
-                ('date_invoice', '<=', end_period),
-                ('currency_id', '=', self.currency_id.id),
-                ('type', 'in', types),
-                ('state', 'in', ['open', 'paid'])], order="date_invoice, id")
+            ('partner_id', '=', partner),
+            ('date_invoice', '>=', start_period),
+            ('date_invoice', '<=', end_period),
+            ('currency_id', '=', self.currency_id.id),
+            ('type', 'in', types),
+            ('state', 'in', ['open', 'paid'])], order="date_invoice, id")
         return invoices
 
     @api.multi
@@ -102,7 +101,7 @@ class PartnerStatementWizard(models.TransientModel):
         self.sent = True
         return self.env['report'].get_action(
             self,
-            'carbotecnia_partner_statement.partner_statement_report_template'
+            'res_partner_statement.partner_statement_report_template'
         )
 
     @api.model
@@ -157,52 +156,51 @@ class PartnerStatementWizard(models.TransientModel):
 
     @api.model
     def _get_lines_print(self, partner):
-        for rec in self:
-            invoices = self.get_invoices(partner.id)
-            lines = [[], []]
-            totals = {
-                'invoices_total': 0.0,
-                'refunds_subtotal': 0.0,
-                'invoices_subtotal': 0.0,
-                'refunds_total': 0.0,
-                'sales_total': 0.0,
-                'balance': 0.0
-            }
-            for invoice in invoices:
-                if invoice.type in ['out_refund', 'in_refund']:
-                    items, totals = self.items(
-                        invoice, totals, _('Refund'))
-                else:
-                    items, totals = self.items(
-                        invoice, totals, _('Invoice'))
+        invoices = self.get_invoices(partner.id)
+        lines = [[], []]
+        totals = {
+            'invoices_total': 0.0,
+            'refunds_subtotal': 0.0,
+            'invoices_subtotal': 0.0,
+            'refunds_total': 0.0,
+            'sales_total': 0.0,
+            'balance': 0.0
+        }
+        for invoice in invoices:
+            if invoice.type in ['out_refund', 'in_refund']:
+                items, totals = self.items(
+                    invoice, totals, _('Refund'))
+            else:
+                items, totals = self.items(
+                    invoice, totals, _('Invoice'))
+            lines[0].append(items)
+            for payment in invoice.payment_move_line_ids:
+                items, totals = self.items(
+                    payment, totals, _('Payment'))
                 lines[0].append(items)
-                for payment in invoice.payment_move_line_ids:
-                    items, totals = self.items(
-                        payment, totals, _('Payment'))
-                    lines[0].append(items)
-            payment_type = (
-                'inbound' if self.type_report == 'out_invoice'
-                else 'outbound')
-            payments = self.env['account.payment'].search([
-                ('invoice_ids', '=', False),
-                ('partner_id', '=', partner.id),
-                ('state', '=', 'posted'),
-                ('payment_type', '=', payment_type)
-            ])
-            if payments:
-                for payment in payments:
-                    totals['balance'] -= payment.amount
-                    lines[0].append({
-                        'document': _('Payment'),
-                        'number': payment.name,
-                        'ref': '',
-                        'date_exp': payment.payment_date,
-                        'date_ven': payment.payment_date,
-                        'sales': 0.0,
-                        'payment': payment.amount,
-                        'total': totals['balance'],
-                    })
-            totals['sales_total'] = (
-                totals['invoices_subtotal'] - totals['refunds_subtotal'])
-            lines[1] = totals
+        payment_type = (
+            'inbound' if self.type_report == 'out_invoice'
+            else 'outbound')
+        payments = self.env['account.payment'].search([
+            ('invoice_ids', '=', False),
+            ('partner_id', '=', partner.id),
+            ('state', '=', 'posted'),
+            ('payment_type', '=', payment_type)
+        ])
+        if payments:
+            for payment in payments:
+                totals['balance'] -= payment.amount
+                lines[0].append({
+                    'document': _('Payment'),
+                    'number': payment.name,
+                    'ref': '',
+                    'date_exp': payment.payment_date,
+                    'date_ven': payment.payment_date,
+                    'sales': 0.0,
+                    'payment': payment.amount,
+                    'total': totals['balance'],
+                })
+        totals['sales_total'] = (
+            totals['invoices_subtotal'] - totals['refunds_subtotal'])
+        lines[1] = totals
         return lines
