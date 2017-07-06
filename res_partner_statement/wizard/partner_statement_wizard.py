@@ -101,7 +101,7 @@ class PartnerStatementWizard(models.TransientModel):
         self.sent = True
         return self.env['report'].get_action(
             self,
-            'carbotecnia_partner_statement.partner_statement_report_template'
+            'res_partner_statement.partner_statement_report_template'
         )
 
     @api.model
