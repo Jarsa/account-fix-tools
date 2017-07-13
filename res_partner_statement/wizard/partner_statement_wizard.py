@@ -107,8 +107,8 @@ class PartnerStatementWizard(models.TransientModel):
     @api.model
     def items(self, line, totals, type_doc):
         items = {}
-        if type_doc in [_('Invoice'), _('Refund')]:
-            if type_doc == _('Refund'):
+        if type_doc in [_('Invoice'), _('Credit Note')]:
+            if type_doc == _('Credit Note'):
                 totals['refunds_total'] += line.amount_total
                 totals['refunds_subtotal'] += line.amount_untaxed
                 totals['balance'] -= line.amount_total
@@ -120,11 +120,11 @@ class PartnerStatementWizard(models.TransientModel):
                 totals['balance'] += line.amount_total
                 items['sales'] = line.amount_total
                 items['payment'] = 0.0
-            ref = (line.reference
+            ref = (line.number
                    if self.type_report == 'in_invoice'
                    else line.origin)
             items['document'] = type_doc
-            items['number'] = line.number
+            items['number'] = line.move_id.name
             items['ref'] = ref
             items['date_exp'] = line.date_invoice
             items['date_ven'] = line.date_due
@@ -135,10 +135,14 @@ class PartnerStatementWizard(models.TransientModel):
                     amount = abs(line.amount_currency)
                 else:
                     amount = line.credit if line.credit > 0.0 else line.debit
+                doc_name = (
+                    _('Customer Payment')
+                    if self.type_report == 'out_invoice'
+                    else _('Supplier Payment'))
                 totals['balance'] -= amount
-                items['document'] = type_doc
-                items['number'] = line.name
-                items['ref'] = line.move_id.name
+                items['document'] = doc_name
+                items['number'] = line.move_id.name
+                items['ref'] = line.move_id.ref
                 items['date_exp'] = line.date
                 items['date_ven'] = line.date_maturity
                 items['sales'] = 0.0
@@ -169,7 +173,7 @@ class PartnerStatementWizard(models.TransientModel):
         for invoice in invoices:
             if invoice.type in ['out_refund', 'in_refund']:
                 items, totals = self.items(
-                    invoice, totals, _('Refund'))
+                    invoice, totals, _('Credit Note'))
             else:
                 items, totals = self.items(
                     invoice, totals, _('Invoice'))
@@ -191,7 +195,10 @@ class PartnerStatementWizard(models.TransientModel):
             for payment in payments:
                 totals['balance'] -= payment.amount
                 lines[0].append({
-                    'document': _('Payment'),
+                    'document': (
+                        _('Customer Payment')
+                        if self.type_report == 'out_invoice'
+                        else _('Supplier Payment')),
                     'number': payment.name,
                     'ref': '',
                     'date_exp': payment.payment_date,

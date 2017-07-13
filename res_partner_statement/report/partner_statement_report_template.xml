@@ -91,9 +91,12 @@
                                         <th>Reference</th>
                                         <th>Date Exp</th>
                                         <th>Date Due</th>
-                                        <th>Sales</th>
+                                        <th>
+                                            <t t-if="doc.type_report == 'out_invoice'">Sales</t>
+                                            <t t-if="doc.type_report == 'in_invoice'">Purchases</t>
+                                        </th>
                                         <th>Payments</th>
-                                        <th>Total</th>
+                                        <th>Balance</th>
                                     </tr>
                                     <t t-set="sales_subtotal" t-value="0.0"/>
                                     <t t-set="payments_subtotal" t-value="0.0"/>
@@ -103,7 +106,7 @@
                                             <t t-set="sales_subtotal" t-value="sales_subtotal + float(line[&quot;sales&quot;])"/>
                                             <t t-set="payments_subtotal" t-value="payments_subtotal + float(line['payment'])"/>
                                             <td>
-                                                <span t-esc="line['document']"/>
+                                                <span t-esc="str(line['document'])"/>
                                             </td>
                                             <td>
                                                 <span t-esc="line['number']"/>
@@ -174,7 +177,12 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <th>SALES TOTAL:</th>
+                                            <th>
+                                                 <t t-if="doc.type_report == 'out_invoice'">SALES TOTAL:
+                                                </t>
+                                                <t t-if="doc.type_report == 'in_invoice'">PURCHASES TOTAL:
+                                                </t>
+                                            </th>
                                             <td>
                                                 <span t-esc="doc._get_amount(values[1]['sales_total'])"/>
                                             </td>
