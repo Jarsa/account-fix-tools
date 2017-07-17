@@ -120,7 +120,7 @@ class PartnerStatementWizard(models.TransientModel):
                 totals['balance'] += line.amount_total
                 items['sales'] = line.amount_total
                 items['payment'] = 0.0
-            ref = (line.number
+            ref = (line.reference
                    if self.type_report == 'in_invoice'
                    else line.origin)
             items['document'] = type_doc
@@ -200,7 +200,7 @@ class PartnerStatementWizard(models.TransientModel):
                         if self.type_report == 'out_invoice'
                         else _('Supplier Payment')),
                     'number': payment.name,
-                    'ref': '',
+                    'ref': payment.communication,
                     'date_exp': payment.payment_date,
                     'date_ven': payment.payment_date,
                     'sales': 0.0,
