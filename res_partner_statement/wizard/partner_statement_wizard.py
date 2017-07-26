@@ -170,18 +170,25 @@ class PartnerStatementWizard(models.TransientModel):
             'sales_total': 0.0,
             'balance': 0.0
         }
+        lines_to_print = []
         for invoice in invoices:
-            if invoice.type in ['out_refund', 'in_refund']:
-                items, totals = self.items(
-                    invoice, totals, _('Credit Note'))
-            else:
-                items, totals = self.items(
-                    invoice, totals, _('Invoice'))
+            if invoice not in [x[0] for x in lines_to_print]:
+                if invoice.type in ['out_refund', 'in_refund']:
+                    lines_to_print.append([invoice, _('Credit Note')])
+                else:
+                    lines_to_print.append([invoice, _('Invoice')])
+                for payment in invoice.payment_move_line_ids:
+                    if payment not in [y[0] for y in lines_to_print]:
+                        lines_to_print.append([payment, _('Payment')])
+                    else:
+                        for line in lines_to_print:
+                            if payment == line[0]:
+                                lines_to_print.remove(line)
+                                lines_to_print.append([payment, _('Payment')])
+        for line in lines_to_print:
+            items, totals = self.items(line[0], totals, line[1])
             lines[0].append(items)
-            for payment in invoice.payment_move_line_ids:
-                items, totals = self.items(
-                    payment, totals, _('Payment'))
-                lines[0].append(items)
+
         payment_type = (
             'inbound' if self.type_report == 'out_invoice'
             else 'outbound')
