@@ -166,18 +166,29 @@ class PartnerStatementWizard(models.TransientModel):
             'sales_total': 0.0,
             'balance': 0.0
         }
+        lines_to_print = {}
         for invoice in invoices:
-            if invoice.type in ['out_refund', 'in_refund']:
-                items, totals = self.items(
-                    invoice, totals, _('Refund'))
-            else:
-                items, totals = self.items(
-                    invoice, totals, _('Invoice'))
-            lines[0].append(items)
+            lines_to_print[invoice.id] = {
+                'object': [invoice, _('Credit Note') if invoice.type in [
+                    'out_refund', 'in_refund'] else _('Invoice')],
+                'payments': {}}
             for payment in invoice.payment_move_line_ids:
-                items, totals = self.items(
-                    payment, totals, _('Payment'))
+                for key, pay in {line[0]: line[1][
+                        'payments'] for line in lines_to_print.items(
+                            )}.items():
+                    if payment.id in pay.keys():
+                        del lines_to_print[key]['payments'][payment.id]
+                lines_to_print[invoice.id]['payments'][payment.id] = [
+                    payment, _('Payment')]
+
+        for line in lines_to_print.values():
+            items, totals = self.items(line[
+                'object'][0], totals, line['object'][1])
+            lines[0].append(items)
+            for payment in line['payments'].values():
+                items, totals = self.items(payment[0], totals, payment[1])
                 lines[0].append(items)
+
         payment_type = (
             'inbound' if self.type_report == 'out_invoice'
             else 'outbound')
