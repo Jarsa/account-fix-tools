@@ -6,7 +6,7 @@
         <field name="inherit_id" ref="account.invoice_tree"/>
         <field name="arch" type="xml">
             <field name="number" position="replace">
-                <field name="fix_number"/>
+                <field name="move_name"/>
             </field>
         </field>
     </record>
@@ -16,7 +16,7 @@
         <field name='inherit_id' ref="account.invoice_form"/>
         <field name='arch' type='xml'>
             <field name="number" position="replace">
-                <field name="fix_number"/>
+                <field name="move_name"/>
             </field>
         </field>
     </record>
@@ -26,7 +26,7 @@
         <field name="inherit_id" ref="account.view_account_invoice_filter"/>
         <field name="arch" type="xml">
             <field name="number" position="replace">
-                <field filter_domain="['|','|','|', ('fix_number','ilike',self), ('origin','ilike',self), ('reference', 'ilike', self), ('partner_id', 'child_of', self)]" name="fix_number" string="Invoice"/>
+                <field filter_domain="['|','|','|', ('move_name','ilike',self), ('origin','ilike',self), ('reference', 'ilike', self), ('partner_id', 'child_of', self)]" name="move_name" string="Invoice"/>
             </field>
         </field>
     </record>
@@ -36,7 +36,7 @@
         <field name="inherit_id" ref="account.invoice_supplier_tree"/>
         <field name="arch" type="xml">
             <field name="number" position="replace">
-                <field name="fix_number"/>
+                <field name="move_name"/>
             </field>
         </field>
     </record>
@@ -46,7 +46,7 @@
         <field name='inherit_id' ref="account.invoice_supplier_form"/>
         <field name='arch' type='xml'>
             <field name="number" position="replace">
-                <field name="fix_number"/>
+                <field name="move_name" readonly="1"/>
             </field>
         </field>
     </record>
