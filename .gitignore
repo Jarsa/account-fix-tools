@@ -13,7 +13,6 @@ develop-eggs/
 dist/
 downloads/
 eggs/
-.eggs/
 lib/
 lib64/
 parts/
@@ -37,15 +36,12 @@ pip-delete-this-directory.txt
 htmlcov/
 .tox/
 .coverage
-.coverage.*
 .cache
 nosetests.xml
 coverage.xml
-*,cover
 
 # Translations
 *.mo
-*.pot
 
 # Django stuff:
 *.log
@@ -55,8 +51,8 @@ docs/_build/
 
 # PyBuilder
 target/
+
 .DS_Store
 .coveragerc
-odoo.tar.gz
-sftp-config.json
 .coveralls.yml
+odoo.tar.gz
