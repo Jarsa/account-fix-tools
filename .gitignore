@@ -1,6 +1,7 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
+*$py.class
 
 # C extensions
 *.so
@@ -42,6 +43,7 @@ htmlcov/
 nosetests.xml
 coverage.xml
 *,cover
+.hypothesis/
 
 # Translations
 *.mo
@@ -55,8 +57,13 @@ docs/_build/
 
 # PyBuilder
 target/
-.DS_Store
-.coveragerc
-odoo.tar.gz
-sftp-config.json
-.coveralls.yml
+
+#Ipython Notebook
+.ipynb_checkpoints
+.idea/*
+
+# sphinx
+#
+*_build/*
+l10n_mx_base/doc/_build/*
+doc/_build/*
