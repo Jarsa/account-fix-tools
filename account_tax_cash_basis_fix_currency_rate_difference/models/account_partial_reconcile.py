@@ -29,11 +29,37 @@ class AccountPartialReconcileCashBasis(models.Model):
                 rec.debit_move_id.move_id if
                 rec.credit_move_id.journal_id.type == 'purchase' else
                 rec.credit_move_id)
+            lines = []
+            analytic_accounts = []
+
+            # We get the analytic account if this exists in the invoice
+            for line in invoice_move.move_id.line_ids.filtered(
+                    lambda r: r.analytic_account_id):
+                analytic_accounts.append(line.analytic_account_id.id)
+            total_analytic_account = len(analytic_accounts)
+            if total_analytic_account > 0:
+                analytic_accounts = list(set(analytic_accounts))[0]
+            else:
+                analytic_accounts = False
+            tax_accounts = []
+            taxes = self.env['account.tax'].search(
+                [('use_cash_basis', '=', True)])
+
+            # We get only the Profit / Loss line to put the analytic account
+            for tax in taxes:
+                tax_accounts.append(tax.cash_basis_account.id)
+                tax_accounts.append(tax.account_id.id)
+                tax_accounts.append(tax.refund_account_id.id)
+            for aml in move.line_ids:
+                if (aml.account_id.id not in tax_accounts and
+                        not aml.account_id.reconcile):
+                    lines.append((1, aml.id, {
+                        'analytic_account_id': analytic_accounts,
+                    }))
             # We loop the tax lines of the invoice move to get the tax rate
             for tax in invoice_move.move_id.line_ids.filtered(
                     lambda r: r.tax_line_id.use_cash_basis).mapped(
                     "tax_line_id"):
-                lines = []
                 # We check if the move will be a amount_currency fix
                 # if this is True we compute the currency amount
                 # to the correspinding currency.
@@ -78,6 +104,7 @@ class AccountPartialReconcileCashBasis(models.Model):
                     'move_id': move.id,
                     'currency_id': currency.id,
                     'partner_id': rec.debit_move_id.partner_id.id,
+                    'analytic_account_id': analytic_accounts,
                 }))
             move.button_cancel()
             move.write({
