@@ -50,9 +50,9 @@ class AccountPartialReconcileCashBasis(models.Model):
                         'Currency exchange rate difference for: ' +
                         tax.name)),
                     'debit': (
-                        tax_amount_diff < 0 and -tax_amount_diff or 0.0),
-                    'credit': (
                         tax_amount_diff > 0 and tax_amount_diff or 0.0),
+                    'credit': (
+                        tax_amount_diff < 0 and -tax_amount_diff or 0.0),
                     'account_id': tax.cash_basis_account.id,
                     'move_id': move.id,
                     'currency_id': currency.id,
@@ -64,9 +64,9 @@ class AccountPartialReconcileCashBasis(models.Model):
                         'Currency exchange rate difference for: ' +
                         tax.name)),
                     'debit': (
-                        tax_amount_diff > 0 and tax_amount_diff or 0.0),
-                    'credit': (
                         tax_amount_diff < 0 and -tax_amount_diff or 0.0),
+                    'credit': (
+                        tax_amount_diff > 0 and tax_amount_diff or 0.0),
                     'account_id': (
                         tax_amount_diff > 0 and
                         rec.company_id.currency_exchange_journal_id.
