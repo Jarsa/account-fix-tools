@@ -32,15 +32,24 @@ class AccountPartialReconcileCashBasis(models.Model):
             lines = []
             analytic_accounts = []
 
+            # We check if the move will be a amount_currency fix
+            # if this is True we compute the currency amount
+            # to the correspinding currency.
+            if diff_in_currency != 0 and amount_diff == 0:
+                amount_diff = (
+                    currency.with_context(date=bank_move.date).compute(
+                        diff_in_currency, rec.company_currency_id))
+
+            diff_factor = amount_diff
             # We get the analytic account if this exists in the invoice
             for line in invoice_move.move_id.line_ids.filtered(
                     lambda r: r.analytic_account_id):
                 analytic_accounts.append(line.analytic_account_id.id)
-            total_analytic_account = len(analytic_accounts)
-            if total_analytic_account > 0:
-                analytic_accounts = list(set(analytic_accounts))[0]
-            else:
-                analytic_accounts = False
+            if analytic_accounts:
+                analytic_accounts = list(set(analytic_accounts))
+                total_analytic_accounts = len(analytic_accounts)
+                diff_factor = amount_diff / total_analytic_accounts
+
             tax_accounts = []
             taxes = self.env['account.tax'].search(
                 [('use_cash_basis', '=', True)])
@@ -53,50 +62,19 @@ class AccountPartialReconcileCashBasis(models.Model):
             for aml in move.line_ids:
                 if (aml.account_id.id not in tax_accounts and
                         not aml.account_id.reconcile):
-                    lines.append((1, aml.id, {
-                        'analytic_account_id': analytic_accounts,
-                    }))
-            # We loop the tax lines of the invoice move to get the tax rate
-            for tax in invoice_move.move_id.line_ids.filtered(
-                    lambda r: r.tax_line_id.use_cash_basis).mapped(
-                    "tax_line_id"):
-                # We check if the move will be a amount_currency fix
-                # if this is True we compute the currency amount
-                # to the correspinding currency.
-                if diff_in_currency != 0 and amount_diff == 0:
-                    amount_diff = (
-                        currency.with_context(date=bank_move.date).compute(
-                            diff_in_currency, rec.company_currency_id))
-                # We get the tax difference based in the base amount
-                tax_amount_diff = (
-                    (amount_diff /
-                     (abs(tax.amount) * .01 + 1) * (abs(tax.amount) * .01))
-                    )
-                # We create the tax counterpart
-                lines.append((0, 0, {
-                    'name': _(
-                        'Currency exchange rate difference for: ' +
-                        tax.name),
-                    'debit': (
-                        tax_amount_diff < 0 and -tax_amount_diff or 0.0),
-                    'credit': (
-                        tax_amount_diff > 0 and tax_amount_diff or 0.0),
-                    'account_id': tax.cash_basis_account.id,
-                    'move_id': move.id,
-                    'currency_id': currency.id,
-                    'partner_id': rec.debit_move_id.partner_id.id,
-                }))
+                    lines.append((2, aml.id))
+
+            for index in range(total_analytic_accounts):
                 # We create the gain / loss counterpart
                 lines.append((0, 0, {
                     'name': _(
-                        'Currency exchange rate difference for: ' +
-                        tax.name),
+                        'Currency exchange rate difference'),
                     'debit': (
-                        tax_amount_diff > 0 and tax_amount_diff or 0.0),
+                        diff_factor > 0 and diff_factor or 0.0),
                     'credit': (
-                        tax_amount_diff < 0 and -tax_amount_diff or 0.0),
+                        diff_factor < 0 and -diff_factor or 0.0),
                     'account_id': (
-                        tax_amount_diff > 0 and
+                        diff_factor > 0 and
                         rec.company_id.currency_exchange_journal_id.
                         default_debit_account_id.id or
                         rec.company_id.currency_exchange_journal_id.
@@ -104,8 +82,52 @@ class AccountPartialReconcileCashBasis(models.Model):
                     'move_id': move.id,
                     'currency_id': currency.id,
                     'partner_id': rec.debit_move_id.partner_id.id,
-                    'analytic_account_id': analytic_accounts,
+                    'analytic_account_id': analytic_accounts[index],
                 }))
+                # We loop the tax lines of the invoice move to get the tax rate
+                for tax in invoice_move.move_id.line_ids.filtered(
+                        lambda r: r.tax_line_id.use_cash_basis).mapped(
+                        "tax_line_id"):
+                    # We get the tax difference based in the base amount
+                    tax_amount_diff = (
+                        (diff_factor /
+                         (abs(tax.amount) * .01 + 1) * (abs(tax.amount) * .01))
+                        )
+                    # We create the tax counterpart
+                    lines.append((0, 0, {
+                        'name': _(
+                            'Currency exchange rate difference for: ' +
+                            tax.name),
+                        'debit': (
+                            tax_amount_diff < 0 and -tax_amount_diff or 0.0),
+                        'credit': (
+                            tax_amount_diff > 0 and tax_amount_diff or 0.0),
+                        'account_id': tax.cash_basis_account.id,
+                        'move_id': move.id,
+                        'currency_id': currency.id,
+                        'partner_id': rec.debit_move_id.partner_id.id,
+                    }))
+                    # We create the gain / loss counterpart
+                    lines.append((0, 0, {
+                        'name': _(
+                            'Currency exchange rate difference for: ' +
+                            tax.name),
+                        'debit': (
+                            tax_amount_diff > 0 and tax_amount_diff or 0.0),
+                        'credit': (
+                            tax_amount_diff < 0 and -tax_amount_diff or 0.0),
+                        'account_id': (
+                            tax_amount_diff > 0 and
+                            rec.company_id.currency_exchange_journal_id.
+                            default_debit_account_id.id or
+                            rec.company_id.currency_exchange_journal_id.
+                            default_credit_account_id.id),
+                        'move_id': move.id,
+                        'currency_id': currency.id,
+                        'partner_id': rec.debit_move_id.partner_id.id,
+                        'analytic_account_id': analytic_accounts[index],
+                    }))
+
             move.button_cancel()
             move.write({
                 'line_ids': [x for x in lines],
