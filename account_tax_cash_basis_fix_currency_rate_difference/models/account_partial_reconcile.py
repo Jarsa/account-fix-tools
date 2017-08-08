@@ -30,7 +30,6 @@ class AccountPartialReconcileCashBasis(models.Model):
                 rec.credit_move_id.journal_id.type == 'purchase' else
                 rec.credit_move_id)
             lines = []
-            analytic_accounts = []
 
             # We check if the move will be a amount_currency fix
             # if this is True we compute the currency amount
@@ -39,32 +38,37 @@ class AccountPartialReconcileCashBasis(models.Model):
                 amount_diff = (
                     currency.with_context(date=bank_move.date).compute(
                         diff_in_currency, rec.company_currency_id))
-
             diff_factor = amount_diff
-            # We get the analytic account if this exists in the invoice
-            for line in invoice_move.move_id.line_ids.filtered(
-                    lambda r: r.analytic_account_id):
-                analytic_accounts.append(line.analytic_account_id.id)
-            if analytic_accounts:
-                analytic_accounts = list(set(analytic_accounts))
-                total_analytic_accounts = len(analytic_accounts)
-                diff_factor = amount_diff / total_analytic_accounts
 
-            tax_accounts = []
-            taxes = self.env['account.tax'].search(
-                [('use_cash_basis', '=', True)])
+            root_amount = (
+                invoice_move.debit if invoice_move.debit > 0.0
+                else invoice_move.credit)
+            an_lines = self.env['account.move.line'].read_group(
+                [('move_id', '=', invoice_move.move_id.id),
+                 ('analytic_account_id', '!=', False)],
+                ['debit', 'credit', 'analytic_account_id'],
+                'analytic_account_id', lazy=False)
+            total_lines = len(an_lines)
+            data = []
+            if total_lines > 0:
+                for aml in move.line_ids:
+                    if not aml.account_id.reconcile:
+                        lines.append((2, aml.id))
 
-            # We get only the Profit / Loss line to put the analytic account
-            for tax in taxes:
-                tax_accounts.append(tax.cash_basis_account.id)
-                tax_accounts.append(tax.account_id.id)
-                tax_accounts.append(tax.refund_account_id.id)
-            for aml in move.line_ids:
-                if (aml.account_id.id not in tax_accounts and
-                        not aml.account_id.reconcile):
-                    lines.append((2, aml.id))
-
-            for index in range(total_analytic_accounts):
+            for an_line in an_lines:
+                tax_rate = sum(
+                    invoice_move.move_id.line_ids.filtered(
+                        lambda r: r.tax_line_id).mapped(
+                        'tax_line_id').mapped('amount')) / 100
+                an_amount = (
+                    an_line['debit']
+                    if invoice_move.credit > 0.0
+                    else an_line['credit'])
+                an_percentage = round(
+                    ((an_amount + (an_amount * tax_rate)) * 100) /
+                    root_amount)
+                diff_factor = (amount_diff * (an_percentage / 100))
+                data.append(diff_factor)
                 # We create the gain / loss counterpart
                 lines.append((0, 0, {
                     'name': _(
@@ -82,15 +86,20 @@ class AccountPartialReconcileCashBasis(models.Model):
                     'move_id': move.id,
                     'currency_id': currency.id,
                     'partner_id': rec.debit_move_id.partner_id.id,
-                    'analytic_account_id': analytic_accounts[index],
+                    'analytic_account_id': an_line['analytic_account_id'][0],
                 }))
-                # We loop the tax lines of the invoice move to get the tax rate
-                for tax in invoice_move.move_id.line_ids.filtered(
-                        lambda r: r.tax_line_id.use_cash_basis).mapped(
-                        "tax_line_id"):
-                    # We get the tax difference based in the base amount
+
+            if total_lines == 0:
+                total_lines = 1
+                data.append(diff_factor)
+            # We loop the tax lines of the invoice move to get the tax rate
+            # We get the tax difference based in the base amount
+            for tax in invoice_move.move_id.line_ids.filtered(
+                    lambda r: r.tax_line_id.use_cash_basis).mapped(
+                    "tax_line_id"):
+                for index in range(total_lines):
                     tax_amount_diff = (
-                        (diff_factor /
+                        (data[index] /
                          (abs(tax.amount) * .01 + 1) * (abs(tax.amount) * .01))
                         )
                     # We create the tax counterpart
@@ -125,13 +134,15 @@ class AccountPartialReconcileCashBasis(models.Model):
                         'move_id': move.id,
                         'currency_id': currency.id,
                         'partner_id': rec.debit_move_id.partner_id.id,
-                        'analytic_account_id': analytic_accounts[index],
+                        'analytic_account_id': (
+                            an_lines[index]['analytic_account_id'][0]),
                     }))
-
-            move.button_cancel()
-            move.write({
-                'line_ids': [x for x in lines],
-                'ref': invoice_move.move_id.name,
-            })
-            move.post()
+                import ipdb; ipdb.set_trace()      
+                move.button_cancel()
+                move.write({
+                    'line_ids': [x for x in lines],
+                    'ref': invoice_move.move_id.name,
+                    'diff_move_id': invoice_move.move_id.id,
+                })
+                move.post()
         return line_to_reconcile, partial_rec
