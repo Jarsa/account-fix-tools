@@ -4,50 +4,68 @@
         <field name="name">view.account.invoice.fix.tree</field>
         <field name="model">account.invoice</field>
         <field name="inherit_id" ref="account.invoice_tree"/>
+        <field name="priority">100</field>
         <field name="arch" type="xml">
-            <field name="number" position="replace">
-                <field name="move_name"/>
-            </field>
+            <xpath expr="//field[@name='number']" position="replace">
+                <field name="move_name" string="Number"/>
+            </xpath>
+        </field>
+    </record>
+    <record model='ir.ui.view' id='view_account_invoice_fix_kanban'>
+        <field name='name'>view.account.invoice.fix.form</field>
+        <field name='model'>account.invoice</field>
+        <field name='inherit_id' ref="account.invoice_kanban"/>
+        <field name="priority">100</field>
+        <field name='arch' type='xml'>
+            <xpath expr="//field[@name='number']" position="replace">
+                <field name="move_name" readonly="1"/>
+            </xpath>
         </field>
     </record>
     <record model='ir.ui.view' id='view_account_invoice_fix_form'>
         <field name='name'>view.account.invoice.fix.form</field>
         <field name='model'>account.invoice</field>
         <field name='inherit_id' ref="account.invoice_form"/>
+        <field name="priority">100</field>
         <field name='arch' type='xml'>
-            <field name="number" position="replace">
-                <field name="move_name"/>
-            </field>
+            <xpath expr="//field[@name='move_name']" position="replace"/>
+            <xpath expr="//field[@name='number']" position="replace">
+                <field name="move_name" readonly="1"/>
+            </xpath>
         </field>
     </record>
     <record id="view_account_invoice_fix_search" model="ir.ui.view">
         <field name="name">view.account.invoice.fix.search</field>
         <field name="model">account.invoice</field>
         <field name="inherit_id" ref="account.view_account_invoice_filter"/>
+        <field name="priority">100</field>
         <field name="arch" type="xml">
-            <field name="number" position="replace">
+            <xpath expr="//field[@name='number']" position="replace">
                 <field filter_domain="['|','|','|', ('move_name','ilike',self), ('origin','ilike',self), ('reference', 'ilike', self), ('partner_id', 'child_of', self)]" name="move_name" string="Invoice"/>
-            </field>
+            </xpath>
         </field>
     </record>
     <record id="view_account_invoice_fix_supplier_tree" model="ir.ui.view">
         <field name="name">view.account.invoice.fix.supplier.tree</field>
         <field name="model">account.invoice</field>
         <field name="inherit_id" ref="account.invoice_supplier_tree"/>
+        <field name="priority">100</field>
         <field name="arch" type="xml">
-            <field name="number" position="replace">
-                <field name="move_name"/>
-            </field>
+            <xpath expr="//field[@name='number']" position="replace">
+                <field name="move_name" string="Number"/>
+            </xpath>
         </field>
     </record>
     <record model='ir.ui.view' id='view_account_invoice_fix_supplier_form'>
         <field name='name'>view.account.invoice.fix.supplier.form</field>
         <field name='model'>account.invoice</field>
         <field name='inherit_id' ref="account.invoice_supplier_form"/>
+        <field name="priority">100</field>
         <field name='arch' type='xml'>
-            <field name="number" position="replace">
+            <xpath expr="//field[@name='move_name']" position="replace"/>
+            <xpath expr="//field[@name='number']" position="replace">
                 <field name="move_name" readonly="1"/>
-            </field>
+            </xpath>
         </field>
     </record>
 </odoo>
