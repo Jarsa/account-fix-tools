@@ -137,7 +137,6 @@ class AccountPartialReconcileCashBasis(models.Model):
                         'analytic_account_id': (
                             an_lines[index]['analytic_account_id'][0]),
                     }))
-                import ipdb; ipdb.set_trace()      
                 move.button_cancel()
                 move.write({
                     'line_ids': [x for x in lines],
