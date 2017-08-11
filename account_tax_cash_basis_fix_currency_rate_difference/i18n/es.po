@@ -16,7 +16,7 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: account_tax_cash_basis_fix_currency_rate_difference
-#: code:addons/account_tax_cash_basis_fix_currency_rate_difference/models/account_partial_reconcile.py:70
+#: code:addons/account_tax_cash_basis_fix_currency_rate_difference/models/account_partial_reconcile.py:75
 #, python-format
 msgid "Exchange Difference"
 msgstr "Fluctuación Cambiaria"
