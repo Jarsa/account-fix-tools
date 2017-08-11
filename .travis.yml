@@ -39,8 +39,9 @@ virtualenv:
 install:
   - git clone --depth=1 https://github.com/jarsa/maintainer-quality-tools.git ${HOME}/maintainer-quality-tools
   - export PATH=${HOME}/maintainer-quality-tools/travis:${PATH}
-  - travis_install_nightly
+  - if [[ "${OCA_RUNBOT}" == "1" ]]; then git clone --depth=1 git@github.com:odoo/enterprise.git -b $VERSION ${HOME}/enterprise; fi
   - export WKHTMLTOPDF_VERSION=0.12.4
+  - travis_install_nightly
 
 script:
   - travis_run_tests
