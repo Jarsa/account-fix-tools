@@ -65,10 +65,10 @@ class AccountPartialReconcileCashBasis(models.Model):
                     % (self.company_id.name))
             if self.debit_move_id.move_id.journal_id.type == 'sale':
                 tax_move = self.debit_move_id.move_id
-                ref = self.credit_move_id.move_id.name
+                ref = self.debit_move_id.move_id.name
             else:
                 tax_move = self.credit_move_id.move_id
-                ref = self.debit_move_id.move_id.name
+                ref = self.credit_move_id.move_id.name
             move_vals = {
                 'journal_id': self.company_id.tax_cash_basis_journal_id.id,
                 'line_ids': line_to_create,
