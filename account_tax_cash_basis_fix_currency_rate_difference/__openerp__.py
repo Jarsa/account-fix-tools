@@ -17,7 +17,9 @@
         " to the exchange reference journal entry and fix "
         "the currency rate difference with tax cash basis behavior."),
     "license": "AGPL-3",
-    "data": [],
+    "data": [
+        'views/account_move_view.xml',
+    ],
     "application": False,
     "installable": True,
 }
