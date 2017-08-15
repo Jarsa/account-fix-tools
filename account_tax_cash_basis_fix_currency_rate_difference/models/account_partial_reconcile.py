@@ -27,11 +27,11 @@ class AccountPartialReconcileCashBasis(models.Model):
                 rec.debit_move_id.move_id if
                 rec.credit_move_id.journal_id.type == 'purchase' else
                 rec.credit_move_id)
+            lines = []
             # We loop the tax lines of the invoice move to get the tax rate
             for tax in invoice_move.move_id.line_ids.filtered(
                     lambda r: r.tax_line_id.use_cash_basis).mapped(
                     "tax_line_id"):
-                lines = []
                 # We check if the move will be a amount_currency fix
                 # if this is True we compute the currency amount
                 # to the correspinding currency.
@@ -50,9 +50,9 @@ class AccountPartialReconcileCashBasis(models.Model):
                         'Currency exchange rate difference for: ' +
                         tax.name)),
                     'debit': (
-                        tax_amount_diff < 0 and -tax_amount_diff or 0.0),
-                    'credit': (
                         tax_amount_diff > 0 and tax_amount_diff or 0.0),
+                    'credit': (
+                        tax_amount_diff < 0 and -tax_amount_diff or 0.0),
                     'account_id': tax.cash_basis_account.id,
                     'move_id': move.id,
                     'currency_id': currency.id,
@@ -64,9 +64,9 @@ class AccountPartialReconcileCashBasis(models.Model):
                         'Currency exchange rate difference for: ' +
                         tax.name)),
                     'debit': (
-                        tax_amount_diff > 0 and tax_amount_diff or 0.0),
-                    'credit': (
                         tax_amount_diff < 0 and -tax_amount_diff or 0.0),
+                    'credit': (
+                        tax_amount_diff > 0 and tax_amount_diff or 0.0),
                     'account_id': (
                         tax_amount_diff > 0 and
                         rec.company_id.currency_exchange_journal_id.
