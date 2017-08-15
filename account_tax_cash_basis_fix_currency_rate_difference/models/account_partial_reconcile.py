@@ -61,10 +61,7 @@ class AccountPartialReconcileCashBasis(models.Model):
                     invoice_move.move_id.line_ids.filtered(
                         lambda r: r.tax_line_id).mapped(
                         'tax_line_id').mapped('amount')) / 100
-                an_amount = (
-                    an_line['debit']
-                    if invoice_move.credit > 0.0
-                    else an_line['credit'])
+                an_amount = abs(an_line['debit'] - an_line['credit'])
                 an_percentage = round(
                     ((an_amount + (an_amount * tax_rate)) * 100) /
                     root_amount)
