@@ -107,8 +107,8 @@ class PartnerStatementWizard(models.TransientModel):
     @api.model
     def items(self, line, totals, type_doc):
         items = {}
-        if type_doc in [_('Invoice'), _('Refund')]:
-            if type_doc == _('Refund'):
+        if type_doc in [_('Invoice'), _('Credit Note')]:
+            if type_doc == _('Credit Note'):
                 totals['refunds_total'] += line.amount_total
                 totals['refunds_subtotal'] += line.amount_untaxed
                 totals['balance'] -= line.amount_total
@@ -166,6 +166,7 @@ class PartnerStatementWizard(models.TransientModel):
             'sales_total': 0.0,
             'balance': 0.0
         }
+
         lines_to_print = {}
         for invoice in invoices:
             lines_to_print[invoice.id] = {

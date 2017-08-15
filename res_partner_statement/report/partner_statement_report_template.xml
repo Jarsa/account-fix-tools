@@ -99,7 +99,7 @@
                                 <t t-set="values" t-value="doc._get_lines_print(partner)"/>
                                 <tr t-as="line" t-foreach="values[0]">
                                     <t t-if="line">
-                                        <t t-set="sales_subtotal" t-value="sales_subtotal + float(line[&quot;sales&quot;])"/>
+                                        <t t-set="sales_subtotal" t-value="sales_subtotal + float(line['sales'])"/>
                                         <t t-set="payments_subtotal" t-value="payments_subtotal + float(line['payment'])"/>
                                         <td>
                                             <span t-esc="line['document']"/>
