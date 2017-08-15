@@ -124,7 +124,7 @@ class PartnerStatementWizard(models.TransientModel):
                    if self.type_report == 'in_invoice'
                    else line.origin)
             items['document'] = type_doc
-            items['number'] = line.move_id.name
+            items['number'] = line.number
             items['ref'] = ref
             items['date_exp'] = line.date_invoice
             items['date_ven'] = line.date_due
@@ -135,14 +135,10 @@ class PartnerStatementWizard(models.TransientModel):
                     amount = abs(line.amount_currency)
                 else:
                     amount = line.credit if line.credit > 0.0 else line.debit
-                doc_name = (
-                    _('Customer Payment')
-                    if self.type_report == 'out_invoice'
-                    else _('Supplier Payment'))
                 totals['balance'] -= amount
-                items['document'] = doc_name
-                items['number'] = line.move_id.name
-                items['ref'] = line.move_id.ref
+                items['document'] = type_doc
+                items['number'] = line.name
+                items['ref'] = line.move_id.name
                 items['date_exp'] = line.date
                 items['date_ven'] = line.date_maturity
                 items['sales'] = 0.0
@@ -170,24 +166,29 @@ class PartnerStatementWizard(models.TransientModel):
             'sales_total': 0.0,
             'balance': 0.0
         }
-        lines_to_print = []
+
+        lines_to_print = {}
         for invoice in invoices:
-            if invoice not in [x[0] for x in lines_to_print]:
-                if invoice.type in ['out_refund', 'in_refund']:
-                    lines_to_print.append([invoice, _('Credit Note')])
-                else:
-                    lines_to_print.append([invoice, _('Invoice')])
-                for payment in invoice.payment_move_line_ids:
-                    if payment not in [y[0] for y in lines_to_print]:
-                        lines_to_print.append([payment, _('Payment')])
-                    else:
-                        for line in lines_to_print:
-                            if payment == line[0]:
-                                lines_to_print.remove(line)
-                                lines_to_print.append([payment, _('Payment')])
-        for line in lines_to_print:
-            items, totals = self.items(line[0], totals, line[1])
+            lines_to_print[invoice.id] = {
+                'object': [invoice, _('Credit Note') if invoice.type in [
+                    'out_refund', 'in_refund'] else _('Invoice')],
+                'payments': {}}
+            for payment in invoice.payment_move_line_ids:
+                for key, pay in {line[0]: line[1][
+                        'payments'] for line in lines_to_print.items(
+                            )}.items():
+                    if payment.id in pay.keys():
+                        del lines_to_print[key]['payments'][payment.id]
+                lines_to_print[invoice.id]['payments'][payment.id] = [
+                    payment, _('Payment')]
+
+        for line in lines_to_print.values():
+            items, totals = self.items(line[
+                'object'][0], totals, line['object'][1])
             lines[0].append(items)
+            for payment in line['payments'].values():
+                items, totals = self.items(payment[0], totals, payment[1])
+                lines[0].append(items)
 
         payment_type = (
             'inbound' if self.type_report == 'out_invoice'
@@ -202,12 +203,9 @@ class PartnerStatementWizard(models.TransientModel):
             for payment in payments:
                 totals['balance'] -= payment.amount
                 lines[0].append({
-                    'document': (
-                        _('Customer Payment')
-                        if self.type_report == 'out_invoice'
-                        else _('Supplier Payment')),
+                    'document': _('Payment'),
                     'number': payment.name,
-                    'ref': payment.communication,
+                    'ref': '',
                     'date_exp': payment.payment_date,
                     'date_ven': payment.payment_date,
                     'sales': 0.0,
