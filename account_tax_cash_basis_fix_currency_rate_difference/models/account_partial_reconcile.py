@@ -66,6 +66,8 @@ class AccountPartialReconcileCashBasis(models.Model):
                     ((an_amount + (an_amount * tax_rate)) * 100) /
                     root_amount)
                 diff_factor = (amount_diff * (an_percentage / 100))
+                if move.line_ids[0].balance == 0:
+                    diff_factor = 0.0
                 data.append(diff_factor)
                 # We create the gain / loss counterpart
                 lines.append((0, 0, {
