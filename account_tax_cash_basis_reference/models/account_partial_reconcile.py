@@ -46,19 +46,19 @@ class AccountPartialReconcileCashBasis(models.Model):
             if self.debit_move_id.move_id.journal_id.type == 'sale':
                 tax_move = self.debit_move_id.move_id
                 ref = self.debit_move_id.move_id.name
+                move_date = self.credit_move_id.date
             else:
                 tax_move = self.credit_move_id.move_id
                 ref = self.credit_move_id.move_id.name
+                move_date = self.debit_move_id.date
             move_vals = {
                 'journal_id': self.company_id.tax_cash_basis_journal_id.id,
                 'line_ids': line_to_create,
                 'tax_cash_basis_rec_id': self.id,
                 'partner_id': self.credit_move_id.move_id.partner_id.id,
                 'ref': ref,
+                'date': move_date,
             }
-
-            if move_date > self.company_id.period_lock_date:
-                move_vals['date'] = move_date
             move = self.env['account.move'].with_context(
                 dont_create_taxes=True).create(move_vals)
             # post move
