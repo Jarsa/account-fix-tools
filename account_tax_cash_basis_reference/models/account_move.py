@@ -27,6 +27,16 @@ class AccountMove(models.Model):
                 rec.nbr_moves = len(rec.account_move_ids)
 
     @api.multi
+    def _reverse_move(self, date=None, journal_id=None):
+        if self.tax_cash_basis_rec_id:
+            date = (
+                self.tax_cash_basis_rec_id.debit_move_id.date if
+                self.tax_cash_basis_rec_id.debit_move_id
+                .journal_id.type in ['bank', 'cash'] else
+                self.tax_cash_basis_rec_id.credit_move_id.date)
+        return super(AccountMove, self)._reverse_move(date, journal_id)
+
+    @api.multi
     def account_move(self):
         return {
             'name': _('Account Move'),
