@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<odoo>
+    <record model='ir.ui.view' id='view_account_revaluation_settings_form'>
+        <field name='name'>view.account.revaluation.settings.form</field>
+        <field name='model'>account.config.settings</field>
+        <field name='inherit_id' ref='account.view_account_config_settings'/>
+        <field name='arch' type='xml'>
+            <xpath expr='//div[@name="group_multi_currency"]/group/group' position='inside'>
+                <field name='revaluation_journal_id'/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
