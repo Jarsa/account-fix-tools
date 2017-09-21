@@ -28,18 +28,13 @@ class AccountMove(models.Model):
 
     @api.multi
     def _reverse_move(self, date=None, journal_id=None):
-        res = super(AccountMove, self)._reverse_move(date, journal_id)
-        part_reconcile = self.tax_cash_basis_rec_id
-        date = False
-        if part_reconcile:
+        if self.tax_cash_basis_rec_id:
             date = (
-                part_reconcile.debit_move_id.date if
-                part_reconcile.debit_move_id.journal_id.type == 'bank' else
-                part_reconcile.credit_move_id.date)
-            res.date = date
-            for line in res.line_ids:
-                line.date = date
-        return res
+                self.tax_cash_basis_rec_id.debit_move_id.date if
+                self.tax_cash_basis_rec_id.debit_move_id
+                .journal_id.type in ['bank', 'cash'] else
+                self.tax_cash_basis_rec_id.credit_move_id.date)
+        return super(AccountMove, self)._reverse_move(date, journal_id)
 
     @api.multi
     def account_move(self):
