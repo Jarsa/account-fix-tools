@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<odoo>
+    <record model='ir.ui.view' id='view_account_account_revaluation_form'>
+        <field name='name'>view.account.account.revaluation.form</field>
+        <field name='model'>account.account</field>
+        <field name='inherit_id' ref='account.view_account_form'/>
+        <field name='arch' type='xml'>
+            <xpath expr='//field[@name="currency_id"]' position='after'>
+                <field name='apply_for_revaluation'/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
