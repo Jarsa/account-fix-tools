@@ -222,7 +222,7 @@ class AccountRevaluationWizard(models.TransientModel):
                             an_account=an_account,
                             amount=revaluation_amount,
                             currency_id=currency_usd)
-        for account,  amounts in balances[1].items():
+        for account, amount in balances[1].items():
             cutoff_amount = currency_usd.compute(
                 amount['balance_currency'], company_currency)
             revaluation_amount = round(

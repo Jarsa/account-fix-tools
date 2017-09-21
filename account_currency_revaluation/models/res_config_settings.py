@@ -17,18 +17,18 @@ class AccountConfigSettings(models.TransientModel):
         string='Revaluation Journal',
         help='This journal will be used for save'
         'the revaluation data',
-        compute="_get_revaluation_journal_id",
-        inverse="_set_revaluation_journal_id",)
+        compute="_compute_revaluation_journal_id",
+        inverse="_inverse_revaluation_journal_id",)
 
     @api.multi
     @api.depends('company_id')
-    def _get_revaluation_journal_id(self):
+    def _compute_revaluation_journal_id(self):
         for rec in self:
             rec.revaluation_journal_id = (
                 rec.company_id.revaluation_journal_id.id)
 
     @api.multi
-    def _set_revaluation_journal_id(self):
+    def _inverse_revaluation_journal_id(self):
         for rec in self:
             if(rec.revaluation_journal_id !=
                rec.company_id.revaluation_journal_id):
