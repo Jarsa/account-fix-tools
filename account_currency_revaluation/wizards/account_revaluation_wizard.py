@@ -84,10 +84,10 @@ class AccountRevaluationWizard(models.TransientModel):
 
     @api.model
     def prepare_lines(self, kwargs):
-        if kwargs['partner'] == 'False':
-            partner = False
-        else:
-            partner = int(kwargs['partner'])
+        partner = False
+        if 'partner' in kwargs.keys():
+            if kwargs['partner'] != 'False':
+                partner = int(kwargs['partner'])
         return {
             'partner_id': partner,
             'journal_id': kwargs['revaluation_journal_id'].id,
@@ -127,6 +127,10 @@ class AccountRevaluationWizard(models.TransientModel):
                 -amount_currency if line['credit'] == 0 else
                 amount_currency),
             })
+        if 'an_account' in kwargs.keys():
+            line.update({
+                'analytic_account_id': int(kwargs['an_account']),
+                })
         aml_obj.create(line)
 
         line = self.prepare_lines(kwargs)
@@ -138,7 +142,6 @@ class AccountRevaluationWizard(models.TransientModel):
             'amount_currency': (
                 -amount_currency if line['credit'] == 0 else
                 amount_currency),
-            'analytic_account_id': int(kwargs['an_account']),
         })
         reversal_reconcile_line = aml_obj.with_context(
             check_move_validity=False).create(line)
@@ -153,8 +156,11 @@ class AccountRevaluationWizard(models.TransientModel):
             'amount_currency': (
                 -amount_currency if line['debit'] == 0 else
                 amount_currency),
-            'analytic_account_id': int(kwargs['an_account']),
         })
+        if 'an_account' in kwargs.keys():
+            line.update({
+                'analytic_account_id': int(kwargs['an_account']),
+                })
         aml_obj.create(line)
         if (not reconcile_line.reconciled and not
                 reversal_reconcile_line.reconciled and
