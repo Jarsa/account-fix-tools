@@ -15,8 +15,8 @@
         'the currency rate difference with tax cash basis behavior.'),
     'license': 'AGPL-3',
     'data': [
-        'views/account_move_view.xml',
-        ],
+        "views/account_move_view.xml",
+    ],
     'application': False,
     'installable': True,
 }
