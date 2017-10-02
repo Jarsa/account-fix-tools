@@ -23,32 +23,12 @@ class AccountPartialReconcileCashBasis(models.Model):
                 ref = (rec.credit_move_id.move_id.ref or
                        rec.credit_move_id.move_id.name)
                 partner_id = rec.credit_move_id.move_id.partner_id
-
-        tax_accounts = []
-        taxes = self.env['account.tax'].search(
-            [('use_cash_basis', '=', True)])
-        lines_to_unlink = []
-        for tax in taxes:
-            tax_accounts.append(tax.cash_basis_account)
-            tax_accounts.append(tax.account_id)
-            tax_accounts.append(tax.refund_account_id)
         total_lines = len(lines)
         for index in range(total_lines):
             vals = lines[index][2]
-            line_account_id = self.env['account.account'].browse(
-                vals['account_id'])
-            # We check if the account is not a tax account
-            if line_account_id not in list(set(tax_accounts)):
-                lines_to_unlink.append(lines[index])
-            else:
-                vals['partner_id'] = partner_id.id if partner_id else False
-                vals['name'] = ref
-                lines[index] = (0, 0, vals)
-
-        # We remove the trash moves because we only need the tax moves
-        total_lines_unlink = len(lines_to_unlink)
-        for index in range(total_lines_unlink):
-            lines.remove(lines_to_unlink[index])
+            vals['partner_id'] = partner_id.id if partner_id else False
+            vals['name'] = ref
+            lines[index] = (0, 0, vals)
         return lines, move_date
 
     def create_tax_cash_basis_entry(self, value_before_reconciliation):
@@ -65,20 +45,20 @@ class AccountPartialReconcileCashBasis(models.Model):
                     % (self.company_id.name))
             if self.debit_move_id.move_id.journal_id.type == 'sale':
                 tax_move = self.debit_move_id.move_id
-                ref = self.credit_move_id.move_id.name
+                ref = self.debit_move_id.move_id.name
+                move_date = self.credit_move_id.date
             else:
                 tax_move = self.credit_move_id.move_id
-                ref = self.debit_move_id.move_id.name
+                ref = self.credit_move_id.move_id.name
+                move_date = self.debit_move_id.date
             move_vals = {
                 'journal_id': self.company_id.tax_cash_basis_journal_id.id,
                 'line_ids': line_to_create,
                 'tax_cash_basis_rec_id': self.id,
                 'partner_id': self.credit_move_id.move_id.partner_id.id,
                 'ref': ref,
+                'date': move_date,
             }
-
-            if move_date > self.company_id.period_lock_date:
-                move_vals['date'] = move_date
             move = self.env['account.move'].with_context(
                 dont_create_taxes=True).create(move_vals)
             # post move

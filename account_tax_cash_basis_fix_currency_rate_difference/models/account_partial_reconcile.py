@@ -3,21 +3,23 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
 from __future__ import division
+
 from odoo import _, models
 
 
 class AccountPartialReconcileCashBasis(models.Model):
     _inherit = 'account.partial.reconcile'
 
-    def create_exchange_rate_entry(self, aml_to_fix, amount_diff,
-                                   diff_in_currency, currency, move_date):
+    def _fix_multiple_exchange_rates_diff(
+            self, aml_to_fix, amount_diff, diff_in_currency,
+            currency, move_date):
         for rec in self:
-            line_to_reconcile, partial_rec = (
+            move_lines, partial_reconciles = (
                 super(AccountPartialReconcileCashBasis,
-                      self).create_exchange_rate_entry(
+                      self)._fix_multiple_exchange_rates_diff(
                     aml_to_fix, amount_diff, diff_in_currency,
                     currency, move_date))
-            move = line_to_reconcile.move_id
+            move = move_lines.move_id
             # We get the invoice and the payment move
             invoice_move = (
                 rec.credit_move_id if
@@ -27,15 +29,15 @@ class AccountPartialReconcileCashBasis(models.Model):
                 rec.debit_move_id.move_id if
                 rec.credit_move_id.journal_id.type == 'purchase' else
                 rec.credit_move_id)
-            lines = []
             # We loop the tax lines of the invoice move to get the tax rate
             for tax in invoice_move.move_id.line_ids.filtered(
                     lambda r: r.tax_line_id.use_cash_basis).mapped(
                     "tax_line_id"):
+                lines = []
                 # We check if the move will be a amount_currency fix
                 # if this is True we compute the currency amount
                 # to the correspinding currency.
-                if diff_in_currency != 0:
+                if diff_in_currency != 0 and amount_diff == 0:
                     amount_diff = (
                         currency.with_context(date=bank_move.date).compute(
                             diff_in_currency, rec.company_currency_id))
@@ -46,13 +48,13 @@ class AccountPartialReconcileCashBasis(models.Model):
                     )
                 # We create the tax counterpart
                 lines.append((0, 0, {
-                    'name': (_(
-                        'Currency exchange rate difference for: ' +
-                        tax.name)),
+                    'name': (
+                        _('Currency exchange rate difference for: ' +
+                          tax.name)),
                     'debit': (
-                        tax_amount_diff > 0 and tax_amount_diff or 0.0),
-                    'credit': (
                         tax_amount_diff < 0 and -tax_amount_diff or 0.0),
+                    'credit': (
+                        tax_amount_diff > 0 and tax_amount_diff or 0.0),
                     'account_id': tax.cash_basis_account.id,
                     'move_id': move.id,
                     'currency_id': currency.id,
@@ -60,13 +62,13 @@ class AccountPartialReconcileCashBasis(models.Model):
                 }))
                 # We create the gain / loss counterpart
                 lines.append((0, 0, {
-                    'name': (_(
-                        'Currency exchange rate difference for: ' +
-                        tax.name)),
+                    'name': (
+                        _('Currency exchange rate difference for: ' +
+                          tax.name)),
                     'debit': (
-                        tax_amount_diff < 0 and -tax_amount_diff or 0.0),
-                    'credit': (
                         tax_amount_diff > 0 and tax_amount_diff or 0.0),
+                    'credit': (
+                        tax_amount_diff < 0 and -tax_amount_diff or 0.0),
                     'account_id': (
                         tax_amount_diff > 0 and
                         rec.company_id.currency_exchange_journal_id.
@@ -81,6 +83,7 @@ class AccountPartialReconcileCashBasis(models.Model):
             move.write({
                 'line_ids': [x for x in lines],
                 'ref': invoice_move.move_id.name,
+                'diff_move_id': invoice_move.move_id.id,
             })
             move.post()
-        return line_to_reconcile, partial_rec
+        return move_lines, partial_reconciles
