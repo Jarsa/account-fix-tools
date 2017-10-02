@@ -8,7 +8,7 @@
     "category": "Accounting",
     "author": "Jarsa Sistemas",
     "website": "https://www.jarsa.com.mx",
-    "depends": ["account_tax_cash_basis"],
+    "depends": ["account_tax_cash_basis", "account_cancel"],
     "summary": "This module assign the tax moves to the invoice moves",
     "license": "AGPL-3",
     "data": [
