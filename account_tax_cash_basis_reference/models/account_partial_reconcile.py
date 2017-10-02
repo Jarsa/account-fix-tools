@@ -2,67 +2,55 @@
 # Copyright 2017, Jarsa Sistemas, S.A. de C.V.
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from odoo import _, models
-from odoo.exceptions import UserError
+from odoo import api, fields, models
 
 
 class AccountPartialReconcileCashBasis(models.Model):
     _inherit = 'account.partial.reconcile'
 
-    def _get_tax_cash_basis_lines(self, value_before_reconciliation):
-        lines, move_date = super(
-            AccountPartialReconcileCashBasis, self)._get_tax_cash_basis_lines(
-            value_before_reconciliation)
-        for rec in self:
-            ref = '/'
-            partner_id = False
-            if rec.debit_move_id.move_id.journal_id.type == 'sale':
-                ref = rec.debit_move_id.move_id.name
-                partner_id = rec.debit_move_id.move_id.partner_id
-            else:
-                ref = (rec.credit_move_id.move_id.ref or
-                       rec.credit_move_id.move_id.name)
-                partner_id = rec.credit_move_id.move_id.partner_id
-        total_lines = len(lines)
-        for index in range(total_lines):
-            vals = lines[index][2]
-            vals['partner_id'] = partner_id.id if partner_id else False
-            vals['name'] = ref
-            lines[index] = (0, 0, vals)
-        return lines, move_date
+    @api.model
+    def create(self, vals):
+        res = super(AccountPartialReconcileCashBasis, self).create(vals)
+        move_tax = self.env['account.move'].search(
+            [('tax_cash_basis_rec_id', '=', res.id)])
 
-    def create_tax_cash_basis_entry(self, value_before_reconciliation):
-        line_to_create, move_date = self._get_tax_cash_basis_lines(
-            value_before_reconciliation)
-        tax_move = False
-        ref = False
-        if line_to_create:
-            if not self.company_id.tax_cash_basis_journal_id:
-                raise UserError(
-                    _('There is no tax cash basis journal defined '
-                        'for this company: "%s" \n'
-                        'Configure it in Accounting/Configuration/Settings')
-                    % (self.company_id.name))
-            if self.debit_move_id.move_id.journal_id.type == 'sale':
-                tax_move = self.debit_move_id.move_id
-                ref = self.debit_move_id.move_id.name
-                move_date = self.credit_move_id.date
+        debit_move = res.debit_move_id
+        credit_move = res.credit_move_id
+        if (debit_move.journal_id.type == 'sale' and
+                credit_move.journal_id.type in ['bank', 'cash']):
+            origin_move = debit_move.move_id
+            move_date = credit_move.date
+        # Refunds Validation, we takes the latest date
+        elif (debit_move.journal_id.type in ['sale', 'purchase'] and
+                credit_move.journal_id.type in ['sale', 'purchase']):
+            origin_move = (
+                debit_move.move_id if
+                debit_move.invoice_id.type in ['in_invoice', 'out_invoice']
+                else credit_move.move_id)
+            debit_date = fields.Date.from_string(debit_move.date)
+            credit_date = fields.Date.from_string(credit_move.date)
+            move_date = (
+                fields.Date.to_string(debit_date) if
+                debit_date > credit_date else
+                fields.Date.to_string(credit_date))
+        else:
+            if credit_move.invoice_id:
+                origin_move = credit_move.move_id
+                move_date = debit_move.date
             else:
-                tax_move = self.credit_move_id.move_id
-                ref = self.credit_move_id.move_id.name
-                move_date = self.debit_move_id.date
-            move_vals = {
-                'journal_id': self.company_id.tax_cash_basis_journal_id.id,
-                'line_ids': line_to_create,
-                'tax_cash_basis_rec_id': self.id,
-                'partner_id': self.credit_move_id.move_id.partner_id.id,
-                'ref': ref,
-                'date': move_date,
-            }
-            move = self.env['account.move'].with_context(
-                dont_create_taxes=True).create(move_vals)
-            # post move
-            move.post()
-            # Assign the tax move to the invoice journal entry
-            move.write({'move_id': tax_move.id})
-            return move
+                origin_move = debit_move.move_id
+                move_date = credit_move.date
+
+        move_tax.button_cancel()
+        move_tax.write({
+            'partner_id': origin_move.partner_id.id,
+            'date': move_date,
+            'move_id': origin_move.id,
+            'ref': origin_move.name,
+        })
+        move_tax.line_ids.write({
+            'partner_id': origin_move.partner_id.id,
+            'date': move_date,
+        })
+        move_tax.post()
+        return res

@@ -15,8 +15,10 @@ class PartialReconcile(TransactionCase):
         self.partner = self.env.ref('base.res_partner_2')
         self.journal = self.env['account.journal'].search([
             ('type', '=', 'sale')], limit=1)
+        self.journal.update_posted = True
         self.bank_journal = self.env['account.journal'].search([
             ('type', '=', 'bank')], limit=1)
+        self.bank_journal.update_posted = True
         self.product = self.env.ref(
             'product.product_product_7_product_template')
         self.tax.write({
@@ -25,6 +27,7 @@ class PartialReconcile(TransactionCase):
             })
         self.cash_journal = self.env['account.journal'].search(
             [('type', '=', 'general')], limit=1)
+        self.cash_journal.update_posted = True
         self.env.user.company_id.tax_cash_basis_journal_id = self.cash_journal
 
     def create_invoice(self):
