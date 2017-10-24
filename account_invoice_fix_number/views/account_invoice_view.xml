@@ -12,13 +12,16 @@
         </field>
     </record>
     <record model='ir.ui.view' id='view_account_invoice_fix_kanban'>
-        <field name='name'>view.account.invoice.fix.form</field>
+        <field name='name'>view.account.invoice.fix.kanban</field>
         <field name='model'>account.invoice</field>
         <field name='inherit_id' ref="account.invoice_kanban"/>
         <field name="priority">100</field>
         <field name='arch' type='xml'>
             <xpath expr="//field[@name='number']" position="replace">
                 <field name="move_name" readonly="1"/>
+            </xpath>
+            <xpath expr="//templates/t/div/div[2]/div[1]/span/t[1]" position="replace">
+                <t t-esc="record.move_name.value"/>
             </xpath>
         </field>
     </record>
