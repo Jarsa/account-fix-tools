@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2016, Jarsa Sistemas, S.A. de C.V.
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
@@ -10,8 +9,8 @@ class PartialReconcile(TransactionCase):
 
     def setUp(self):
         super(PartialReconcile, self).setUp()
-        self.tax = self.env.ref('l10n_generic_coa.1_sale_tax_template')
-        self.tax_account = self.env.ref('l10n_generic_coa.1_conf_ova')
+        self.tax = self.env.ref('l10n_mx.tax12')
+        self.tax_account = self.env.ref('l10n_mx.cuenta208_01')
         self.partner = self.env.ref('base.res_partner_2')
         self.journal = self.env['account.journal'].search([
             ('type', '=', 'sale')], limit=1)
@@ -22,8 +21,8 @@ class PartialReconcile(TransactionCase):
         self.product = self.env.ref(
             'product.product_product_7_product_template')
         self.tax.write({
-            'use_cash_basis': True,
-            'cash_basis_account': self.tax_account.id
+            'tax_exigibility': 'on_payment',
+            'cash_basis_account': self.tax_account.id,
             })
         self.cash_journal = self.env['account.journal'].search(
             [('type', '=', 'general')], limit=1)
@@ -48,7 +47,7 @@ class PartialReconcile(TransactionCase):
             'uom_id': self.product.uom_id.id,
             'discount': 10.0,
             'name': 'Product that cost 1000',
-            'invoice_line_tax_ids': [(4, [self.tax.id])],
+            'invoice_line_tax_ids': [(4, self.tax.id)],
         })
         invoice.action_invoice_open()
         return invoice
