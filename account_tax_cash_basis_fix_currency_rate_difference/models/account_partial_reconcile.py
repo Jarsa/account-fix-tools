@@ -12,8 +12,7 @@ class AccountPartialReconcileCashBasis(models.Model):
     @api.model
     def create_exchange_rate_entry(
             self, aml_to_fix, amount_diff, diff_in_currency, currency, move):
-        """
-        Method inherited to fix the tax currency exchange difference.
+        """ Method inherited to fix the tax currency exchange difference.
         Originally Odoo only transfer the invoice taxes with the currency rate
         at invoice date, so, we must fix the currency exchange difference
         of the translated taxes
