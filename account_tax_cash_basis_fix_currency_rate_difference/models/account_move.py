@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2017, Jarsa Sistemas, S.A. de C.V.
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
@@ -8,16 +7,20 @@ from odoo import _, api, fields, models
 class AccountMove(models.Model):
     _inherit = 'account.move'
 
-    nbr_diff_moves = fields.Float(
+    nbr_diff_moves = fields.Integer(
         string='Exchange Diferential', compute="_compute_nbr_diff_moves",
         default=0,)
     account_diff_move_ids = fields.One2many(
         'account.move',
         'diff_move_id',
         string='Account Move',
+        help='List of currency exchange difference journal entries.',
     )
     diff_move_id = fields.Many2one(
         'account.move',
+        string='Counterpart Move',
+        help='Technical field to link the exchange difference journal entries '
+        'with the origin journal entry fixed usually an invoice journal entry',
     )
 
     @api.multi
