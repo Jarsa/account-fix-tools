@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2017, Jarsa Sistemas, S.A. de C.V.
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
@@ -10,6 +9,15 @@ class AccountPartialReconcileCashBasis(models.Model):
 
     @api.model
     def create(self, vals):
+        """ Originally Odoo does not write the partner in the account move lines
+        of the cash journal entry, to show this moves in the DIOT we need
+        set the invoice partner on that amls, also the method links the
+        cash basis journal entry to the invoice journal entry.
+
+        :param vals: dictionary of fields to create the record
+        :return: object.
+            A recordset with the new record created.
+        """
         res = super(AccountPartialReconcileCashBasis, self).create(vals)
         move_tax = self.env['account.move'].search(
             [('tax_cash_basis_rec_id', '=', res.id)])
@@ -45,7 +53,7 @@ class AccountPartialReconcileCashBasis(models.Model):
         move_tax.write({
             'partner_id': origin_move.partner_id.id,
             'date': move_date,
-            'move_id': origin_move.id,
+            'invoice_move_id': origin_move.id,
             'ref': origin_move.name,
         })
         move_tax.line_ids.write({

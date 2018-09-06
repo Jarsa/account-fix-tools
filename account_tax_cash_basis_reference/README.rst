@@ -3,7 +3,7 @@
 
 Account Tax Cash Basis Reference
 ================================
-This module add a tax move reference to the invoice journal entry.
+This modules add the partner to the tax cash basis journal entries and link it to the invoice journal entries.
 
 Usage
 =====
