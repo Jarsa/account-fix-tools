@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 10.0+e\n"
+"Project-Id-Version: Odoo Server 11.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-02 18:58+0000\n"
-"PO-Revision-Date: 2017-10-02 18:58+0000\n"
+"POT-Creation-Date: 2018-09-06 15:19+0000\n"
+"PO-Revision-Date: 2018-09-06 15:19+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -18,7 +18,7 @@ msgstr ""
 #. module: account_tax_cash_basis_fix_currency_rate_difference
 #: model:ir.model,name:account_tax_cash_basis_fix_currency_rate_difference.model_account_move
 msgid "Account Entry"
-msgstr "Entrada contable"
+msgstr "Asiento Contable"
 
 #. module: account_tax_cash_basis_fix_currency_rate_difference
 #: model:ir.model.fields,field_description:account_tax_cash_basis_fix_currency_rate_difference.field_account_move_account_diff_move_ids
@@ -26,22 +26,22 @@ msgid "Account Move"
 msgstr "Polizas Diferencial Cambiario"
 
 #. module: account_tax_cash_basis_fix_currency_rate_difference
-#: code:addons/account_tax_cash_basis_fix_currency_rate_difference/models/account_move.py:32
+#: model:ir.model.fields,field_description:account_tax_cash_basis_fix_currency_rate_difference.field_account_move_diff_move_id
+msgid "Counterpart Move"
+msgstr "Contraparte"
+
+#. module: account_tax_cash_basis_fix_currency_rate_difference
+#: code:addons/account_tax_cash_basis_fix_currency_rate_difference/models/account_move.py:35
 #, python-format
 msgid "Currency Exchange Difference Moves"
 msgstr "Polizas de Diferencial Cambiario"
 
 #. module: account_tax_cash_basis_fix_currency_rate_difference
-#: code:addons/account_tax_cash_basis_fix_currency_rate_difference/models/account_partial_reconcile.py:51
-#: code:addons/account_tax_cash_basis_fix_currency_rate_difference/models/account_partial_reconcile.py:65
+#: code:addons/account_tax_cash_basis_fix_currency_rate_difference/models/account_partial_reconcile.py:74
+#: code:addons/account_tax_cash_basis_fix_currency_rate_difference/models/account_partial_reconcile.py:88
 #, python-format
-msgid "Currency exchange rate difference for: "
-msgstr "Diferencia en tasa de cambio de divisa: "
-
-#. module: account_tax_cash_basis_fix_currency_rate_difference
-#: model:ir.model.fields,field_description:account_tax_cash_basis_fix_currency_rate_difference.field_account_move_diff_move_id
-msgid "Diff move id"
-msgstr "Poliza Origen"
+msgid "Currency exchange rate difference for: %s"
+msgstr "Diferencia en tasa cambiaria para: %s"
 
 #. module: account_tax_cash_basis_fix_currency_rate_difference
 #: model:ir.model.fields,field_description:account_tax_cash_basis_fix_currency_rate_difference.field_account_move_nbr_diff_moves
@@ -49,7 +49,17 @@ msgid "Exchange Diferential"
 msgstr "Diferencial Cambiario"
 
 #. module: account_tax_cash_basis_fix_currency_rate_difference
+#: model:ir.model.fields,help:account_tax_cash_basis_fix_currency_rate_difference.field_account_move_account_diff_move_ids
+msgid "List of currency exchange difference journal entries."
+msgstr "Lista de pólizas de diferencial cambiario."
+
+#. module: account_tax_cash_basis_fix_currency_rate_difference
 #: model:ir.model,name:account_tax_cash_basis_fix_currency_rate_difference.model_account_partial_reconcile
 msgid "Partial Reconcile"
-msgstr "Conciliación parcial"
+msgstr "Conciliación Parcial"
+
+#. module: account_tax_cash_basis_fix_currency_rate_difference
+#: model:ir.model.fields,help:account_tax_cash_basis_fix_currency_rate_difference.field_account_move_diff_move_id
+msgid "Technical field to link the exchange difference journal entries with the origin journal entry fixed usually an invoice journal entry"
+msgstr "Campo tecnico que liga las pólizas de diferencial cambiario con su movimiento origen usualmente una póliza de factura"
 
