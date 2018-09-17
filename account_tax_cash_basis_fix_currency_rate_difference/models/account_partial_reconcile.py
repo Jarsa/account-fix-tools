@@ -47,35 +47,35 @@ class AccountPartialReconcileCashBasis(models.Model):
                         (amount_diff /
                          (abs(tax.amount) * .01 + 1) * (abs(tax.amount) * .01))
                         )
-                    # We create the tax counterpart
-                    lines.append((0, 0, {
-                        'name': (
-                            _('Currency exchange rate difference for: ' +
-                              tax.name)),
-                        'debit': (
-                            tax_amount_diff < 0 and -tax_amount_diff or 0.0),
-                        'credit': (
-                            tax_amount_diff > 0 and tax_amount_diff or 0.0),
-                        'account_id': tax.cash_basis_account.id,
-                        'move_id': diff_move.id,
-                        'currency_id': currency.id,
-                        'partner_id': rec.debit_move_id.partner_id.id,
-                    }))
                     # We create the gain / loss counterpart
                     lines.append((0, 0, {
                         'name': (
                             _('Currency exchange rate difference for: ' +
                               tax.name)),
                         'debit': (
-                            tax_amount_diff > 0 and tax_amount_diff or 0.0),
-                        'credit': (
                             tax_amount_diff < 0 and -tax_amount_diff or 0.0),
+                        'credit': (
+                            tax_amount_diff > 0 and tax_amount_diff or 0.0),
                         'account_id': (
                             tax_amount_diff > 0 and
                             rec.company_id.currency_exchange_journal_id.
                             default_debit_account_id.id or
                             rec.company_id.currency_exchange_journal_id.
                             default_credit_account_id.id),
+                        'move_id': diff_move.id,
+                        'currency_id': currency.id,
+                        'partner_id': rec.debit_move_id.partner_id.id,
+                    }))
+                    # We create the tax counterpart
+                    lines.append((0, 0, {
+                        'name': (
+                            _('Currency exchange rate difference for: ' +
+                              tax.name)),
+                        'debit': (
+                            tax_amount_diff > 0 and tax_amount_diff or 0.0),
+                        'credit': (
+                            tax_amount_diff < 0 and -tax_amount_diff or 0.0),
+                        'account_id': tax.cash_basis_account.id,
                         'move_id': diff_move.id,
                         'currency_id': currency.id,
                         'partner_id': rec.debit_move_id.partner_id.id,
