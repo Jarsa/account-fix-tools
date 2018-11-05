@@ -26,22 +26,15 @@ class AccountPartialReconcileCashBasis(models.Model):
                     rec.credit_move_id if
                     rec.credit_move_id.journal_id.type == 'purchase' else
                     rec.debit_move_id)
-                bank_move = (
-                    rec.debit_move_id.move_id if
-                    rec.credit_move_id.journal_id.type == 'purchase' else
-                    rec.credit_move_id)
                 lines = []
                 invoice_taxes = invoice_move.move_id.line_ids.filtered(
                     'tax_ids').mapped('tax_ids').filtered('use_cash_basis')
                 # We loop the tax lines of the invoice move to get the tax rate
                 for tax in invoice_taxes.filtered(lambda t: t.amount != 0.0):
                     # We check if the move will be a amount_currency fix
-                    # if this is True we compute the currency amount
-                    # to the correspinding currency.
+                    # if this is True we do not need fix anything
                     if diff_in_currency != 0 and amount_diff == 0:
-                        amount_diff = (
-                            currency.with_context(date=bank_move.date).compute(
-                                diff_in_currency, rec.company_currency_id))
+                        return move_lines, partial_reconciles
                     # We get the tax difference based in the base amount
                     tax_amount_diff = (
                         (amount_diff /
