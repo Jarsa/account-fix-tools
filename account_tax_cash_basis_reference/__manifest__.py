@@ -5,7 +5,7 @@
     "name": "Account Tax Cash Basis Reference",
     "version": "12.0.1.0.0",
     "category": "Accounting",
-    "author": "Jarsa Sistemas",
+    "author": "Jarsa Sistemas, Vauxoo",
     "website": "https://www.jarsa.com.mx",
     "depends": ["account_cancel"],
     "summary": "Link tax cash basis moves to the invoice journal entries.",
