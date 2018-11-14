@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <record model='ir.ui.view' id='account_move_cash_basis_form'>
-        <field name='name'>account.move.cash.basis.form</field>
-        <field name='model'>account.move</field>
-        <field name='inherit_id' ref='account.view_move_form'/>
-        <field name='arch' type='xml'>
+    <record model="ir.ui.view" id="view_account_move_form">
+        <field name="name">view.account.move.form</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
             <xpath expr="//button[@name='open_reconcile_view']" position="after">
-                <button class="oe_stat_button" icon="fa-files-o" name="get_tax_journal_entries" type="object" attrs="{'invisible': [('nbr_tax_moves', '=', 0)]}">
-                    <field name="nbr_tax_moves" widget="statinfo"/>
-                </button>
+                <field name="tax_cash_basis_move_ids" invisible="1"/>
+                <button name="action_tax_cash_basis_moves" type="object" class="oe_stat_button" icon="fa-files-o" attrs="{'invisible': [('tax_cash_basis_move_ids', '=', False)]}" string="Tax Move(s)"/>  
             </xpath>
         </field>
     </record>
