@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_account_fiscalyear" model="ir.ui.view">
+        <field name="name">Account FiscalYear Close</field>
+        <field name="model">account.fiscalyear.close.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group string="Please Select The Period To Close">
+                        <group>
+                            <field name="date_start" required="1"/>
+                        </group>
+                        <group>
+                            <field name="date_end" required="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="account_id"/>
+                            <field name="journal_id"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button class="oe_highlight" name="get_years_ending_entry" string="Generate Entry" type="object"/>
+                    <button special="cancel" string="Cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="action_account_fiscalyear_wizard" model="ir.actions.act_window">
+        <field name="name">Account Fiscal Year Entry</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">account.fiscalyear.close.wizard</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+    <menuitem id="account_currency_revaluation_wizard_menu" name="Generate Year-ending's Journal Entry" action="action_account_fiscalyear_wizard" parent="account.menu_finance_entries" sequence="1000" groups="account.group_account_manager"/>
+</odoo>
