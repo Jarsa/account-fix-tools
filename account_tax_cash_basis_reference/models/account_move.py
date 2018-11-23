@@ -17,6 +17,15 @@ class AccountMove(models.Model):
         string='Origin Move',
         help='Original Journal Entry from which this move was created.',
     )
+    tax_cash_basis_moves_count = fields.Integer(
+        string='Currency Exchange Move(s)',
+        compute='_compute_tax_cash_basis_moves_count',)
+
+    @api.depends('tax_cash_basis_move_ids')
+    def _compute_tax_cash_basis_moves_count(self):
+        for rec in self:
+            rec.tax_cash_basis_moves_count = len(
+                rec.tax_cash_basis_move_ids)
 
     @api.multi
     def action_tax_cash_basis_moves(self):
