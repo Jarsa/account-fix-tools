@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.skip.reversal.form</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="50"/>
+        <field name="inherit_id" ref="account.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@data-key='account']/div[3]/div[3]" position="after">
+                <div class="col-12 col-lg-6 o_setting_box" id="currency_rate_difference">
+                    <div class="o_setting_left_pane">
+                        <field name="skip_currency_exchange_difference_reversal"/>
+                    </div>
+                    <div class="o_setting_right_pane" name="skip_currency_exchange_differense_reversal">
+                        <label for="skip_currency_exchange_difference_reversal"/>
+                        <div class="text-muted">
+                            This feature avoids the creation of a reversal Journal Entry for Currency Exchange Difference when a Payment is unreconciled from an invoice.
+                            If Lock Dates are set a Warning will be raised otherwise Currency Exchange Journal Entry will be deleted.
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>
