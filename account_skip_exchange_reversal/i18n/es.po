@@ -1,0 +1,50 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* account_skip_exchange_reversal
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 12.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-11-23 18:33+0000\n"
+"PO-Revision-Date: 2018-11-23 18:33+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: account_skip_exchange_reversal
+#: model:ir.model.fields,field_description:account_skip_exchange_reversal.field_res_company__skip_currency_exchange_difference_reversal
+#: model:ir.model.fields,field_description:account_skip_exchange_reversal.field_res_config_settings__skip_currency_exchange_difference_reversal
+msgid "Avoid Reversal of Currency Exchange Difference Journal Entry"
+msgstr "Omitir Creación de Reversa de la Póliza de Diferencial Cambiario"
+
+#. module: account_skip_exchange_reversal
+#: model:ir.model,name:account_skip_exchange_reversal.model_res_company
+msgid "Companies"
+msgstr "Compañías"
+
+#. module: account_skip_exchange_reversal
+#: model:ir.model,name:account_skip_exchange_reversal.model_res_config_settings
+msgid "Config Settings"
+msgstr "Opciones de Configuración"
+
+#. module: account_skip_exchange_reversal
+#: model:ir.model,name:account_skip_exchange_reversal.model_account_full_reconcile
+msgid "Full Reconcile"
+msgstr "Conciliación completa"
+
+#. module: account_skip_exchange_reversal
+#: model_terms:ir.ui.view,arch_db:account_skip_exchange_reversal.res_config_settings_view_skip_reversal_form
+msgid "This feature avoids the creation of a reversal Journal Entry for Currency Exchange Difference when a Payment is unreconciled from an invoice.\n"
+"                            If Lock Dates are set a Warning will be raised otherwise Currency Exchange Journal Entry will be deleted."
+msgstr "Esta característica evita la creación de la reversa de la Póliza de Diferencial Cambiario cuando un pago es desconciliado de una factura. \n Si hay fecha de bloqueo configurada se mostrará una Advertencia de otro modo la póliza de diferencial cambiario será eliminada"
+
+#. module: account_skip_exchange_reversal
+#: model:ir.model.fields,help:account_skip_exchange_reversal.field_res_company__skip_currency_exchange_difference_reversal
+#: model:ir.model.fields,help:account_skip_exchange_reversal.field_res_config_settings__skip_currency_exchange_difference_reversal
+msgid "This feature avoids the creation of a reversal Journal Entry for Currency Exchange Difference when a Payment isunreconciled from an invoice. If Lock Dates are set a Warning will be raised otherwise Currency Exchange Journal Entry will be deleted."
+msgstr "Esta característica evita la creación de la reversa de la Póliza de Diferencial Cambiario cuando un pago es desconciliado de una factura. Si hay fecha de bloqueo configurada se mostrará una Advertencia de otro modo la póliza de diferencial cambiario será eliminada"
+
