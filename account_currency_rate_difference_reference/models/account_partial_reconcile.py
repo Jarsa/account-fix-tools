@@ -17,15 +17,14 @@ class AccountPartialReconcileCashBasis(models.Model):
                      ('credit_move_id.invoice_id', '!=', False),
                 '&', ('credit_move_id', '=', aml_to_fix.id),
                      ('debit_move_id.invoice_id', '!=', False)], limit=1)
-        for aml in created_lines:
-            origin_move = (
-                partial.credit_move_id.invoice_id and
-                partial.credit_move_id.move_id or
-                partial.debit_move_id.move_id)
-            move.button_cancel()
-            move.write({
-                'ref': origin_move.name,
-                'origin_doc_id': origin_move.id,
-            })
-            move.post()
+        origin_move = (
+            partial.credit_move_id.invoice_id and
+            partial.credit_move_id.move_id or
+            partial.debit_move_id.move_id)
+        move.button_cancel()
+        move.write({
+            'ref': origin_move.name,
+            'origin_doc_id': origin_move.id,
+        })
+        move.post()
         return created_lines, partial_rec
