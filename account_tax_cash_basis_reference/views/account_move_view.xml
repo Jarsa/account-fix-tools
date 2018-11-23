@@ -7,7 +7,9 @@
         <field name="arch" type="xml">
             <xpath expr="//button[@name='open_reconcile_view']" position="after">
                 <field name="tax_cash_basis_move_ids" invisible="1"/>
-                <button name="action_tax_cash_basis_moves" type="object" class="oe_stat_button" icon="fa-files-o" attrs="{'invisible': [('tax_cash_basis_move_ids', '=', False)]}" string="Tax Move(s)"/>  
+                <button name="action_tax_cash_basis_moves" type="object" class="oe_stat_button" icon="fa-files-o" attrs="{'invisible': [('tax_cash_basis_move_ids', '=', False)]}">
+                    <field string="Tax Move(s)" name="tax_cash_basis_moves_count" widget="statinfo"/>
+                </button>
             </xpath>
         </field>
     </record>
