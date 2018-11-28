@@ -73,11 +73,12 @@ class AccountPartialReconcileCashBasis(models.Model):
                         'currency_id': currency.id,
                         'partner_id': rec.debit_move_id.partner_id.id,
                     }))
-                gain_loss_line = aml.move_id.line_ids.filtered(
+                gain_loss_lines = aml.move_id.line_ids.filtered(
                     lambda l: not l.account_id.reconcile)
-                lines.append((1, gain_loss_line.id, {
-                    'tax_ids': [(6, 0, invoice_taxes.ids)],
-                }))
+                for gain_loss_line in gain_loss_lines:
+                    lines.append((1, gain_loss_line.id, {
+                        'tax_ids': [(6, 0, invoice_taxes.ids)],
+                    }))
                 diff_move.button_cancel()
                 diff_move.write({
                     'line_ids': [x for x in lines],
