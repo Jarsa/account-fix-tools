@@ -86,4 +86,5 @@ class AccountPartialReconcileCashBasis(models.Model):
                     'diff_move_id': invoice_move.move_id.id,
                 })
                 diff_move.post()
+                break
         return move_lines, partial_reconciles
