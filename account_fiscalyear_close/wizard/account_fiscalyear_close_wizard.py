@@ -43,8 +43,9 @@ class AccountFiscalYearWizard(models.TransientModel):
             JOIN account_account aac ON aml.account_id = aac.id
             WHERE aml.date BETWEEN %s AND %s
             AND aac.user_type_id IN (13, 14, 15, 16, 17)
+            AND aml.company_id = %s
             GROUP BY aml.account_id, aac.name, aac.user_type_id;
-            """, (self.date_start, self.date_end)
+            """, (self.date_start, self.date_end, self.env.user.company_id.id)
         )
         return self._cr.dictfetchall()
 
