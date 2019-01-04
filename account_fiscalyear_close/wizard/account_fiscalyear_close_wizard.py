@@ -36,17 +36,22 @@ class AccountFiscalYearWizard(models.TransientModel):
         return str(fields.date.today().year - 1) + "-12-31"
 
     @api.model
-    def get_account_balances(self):
-        self._cr.execute("""
+    def _get_account_balances_query(self):
+        return """
             SELECT aml.account_id, aac.name, sum(balance) AS balance,
-            aac.user_type_id FROM account_move_line aml
+                   aac.user_type_id
+            FROM account_move_line aml
             JOIN account_account aac ON aml.account_id = aac.id
             WHERE aml.date BETWEEN %s AND %s
-            AND aac.user_type_id IN (13, 14, 15, 16, 17)
+            AND aac.user_type_id IN (12, 13, 14, 15, 16, 17)
             AND aml.company_id = %s
             GROUP BY aml.account_id, aac.name, aac.user_type_id;
             """, (self.date_start, self.date_end, self.env.user.company_id.id)
-        )
+
+    @api.model
+    def get_account_balances(self):
+        query, params = self._get_account_balances_query()
+        self._cr.execute(query, params)
         return self._cr.dictfetchall()
 
     @api.model
