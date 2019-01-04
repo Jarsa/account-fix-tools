@@ -38,13 +38,15 @@ class AccountFiscalYearWizard(models.TransientModel):
     @api.model
     def _get_account_balances_query(self):
         return """
-            SELECT aml.account_id, aac.name, sum(balance) AS balance,
+            SELECT aml.account_id, aac.name, ROUND(SUM(balance), 2) AS balance,
                    aac.user_type_id
             FROM account_move_line aml
             JOIN account_account aac ON aml.account_id = aac.id
+            JOIN account_move am ON am.id = aml.move_id
             WHERE aml.date BETWEEN %s AND %s
             AND aac.user_type_id IN (12, 13, 14, 15, 16, 17)
             AND aml.company_id = %s
+            AND am.state = 'posted'
             GROUP BY aml.account_id, aac.name, aac.user_type_id;
             """, (self.date_start, self.date_end, self.env.user.company_id.id)
 
