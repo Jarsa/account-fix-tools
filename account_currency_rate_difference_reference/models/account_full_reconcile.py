@@ -12,9 +12,11 @@ class AccountFullReconcile(models.Model):
         res = super().create(vals)
         if not res.exchange_move_id:
             return res
-        origin_move = res.reconciled_line_ids.filtered(
+        invoice_moves = res.reconciled_line_ids.filtered(
             lambda l: l.account_id.reconcile and l.journal_id.type in
             ['sale', 'purchase'] and l.invoice_id.type in
-            ['in_invoice', 'out_invoice']).move_id
-        res.exchange_move_id.origin_doc_id = origin_move.id
+            ['in_invoice', 'out_invoice']).mapped('move_id')
+        invoice_moves.write({
+            'exchange_move_id': res.exchange_move_id.id,
+        })
         return res
