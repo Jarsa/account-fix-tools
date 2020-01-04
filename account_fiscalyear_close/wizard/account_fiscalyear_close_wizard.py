@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Copyright 2018, Jarsa Sistemas, S.A. de C.V.
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
@@ -8,6 +7,7 @@ from odoo.tools.translate import _
 
 class AccountFiscalYearWizard(models.TransientModel):
     _name = 'account.fiscalyear.close.wizard'
+    _description = 'Wizard to create fiscal year closing move'
 
     date_start = fields.Date(
         default=lambda self: self.get_date_start(),
