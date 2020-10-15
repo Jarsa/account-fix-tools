@@ -7,7 +7,6 @@ from odoo import api, models
 class AccountFullReconcile(models.Model):
     _inherit = "account.full.reconcile"
 
-    @api.multi
     def unlink(self):
         """ When removing a payment reconciliation, also unlink its full
         reconciliation if it exists.

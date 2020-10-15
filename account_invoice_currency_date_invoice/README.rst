@@ -13,6 +13,7 @@ Contributors
 ------------
 
 * Jesús Alan Ramos Rodríguez <alan.ramos@jarsa.com.mx>
+* Héctor Herrera Teigeiro    <hector.herrera.mx@gmail.com>
 
 
 Maintainer

@@ -4,10 +4,10 @@
 {
     "name": "Account Fiscal Year Close Analytic",
     "summary": "Account Fiscal Year Close with Analytic Accounts",
-    "version": "12.0.1.0.0",
+    "version": "13.0.1.0.0",
     "category": "Accounting & Finance",
     "website": "https://www.jarsa.com.mx/",
-    "author": "Jarsa Sistemas",
+    "author": "Jarsa Sistemas,MtNet",
     "license": "AGPL-3",
     "depends": [
         'account_fiscalyear_close',

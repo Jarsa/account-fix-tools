@@ -27,7 +27,6 @@ class AccountMove(models.Model):
             rec.tax_cash_basis_moves_count = len(
                 rec.tax_cash_basis_move_ids)
 
-    @api.multi
     def action_tax_cash_basis_moves(self):
         return {
             'name': _('Tax Move(s)'),

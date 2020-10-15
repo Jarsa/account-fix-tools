@@ -3,9 +3,9 @@
 
 {
     "name": "Res Currency Rate Custom Decimals",
-    "version": "12.0.1.0.0",
+    "version": "13.0.1.0.0",
     "category": "Accounting",
-    "author": "Jarsa Sistemas,Vauxoo",
+    "author": "Jarsa Sistemas,Vauxoo,MtNet",
     "website": "https://www.jarsa.com.mx",
     "depends": ["account"],
     "summary": "This module add 10 decimals to the res currency rates",

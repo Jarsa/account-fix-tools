@@ -16,6 +16,7 @@ Contributors
 ------------
 
 * Oscar Ulises Garza Córdova <oscar.garza@jarsa.com.mx>
+* Héctor Herrera Teigeiro    <hector.herrera.mx@gmail.com>
 
 
 Maintainer
