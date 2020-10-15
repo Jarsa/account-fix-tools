@@ -12,7 +12,6 @@ class AccountMove(models.Model):
         string='Currency Exchange Difference Move',
     )
 
-    @api.multi
     def action_currency_rate_diference(self):
         return {
             'name': _('Currency Exchange Difference Move'),

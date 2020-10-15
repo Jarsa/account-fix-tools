@@ -3,9 +3,9 @@
 
 {
     "name": "Account Currency Rate Difference Reference",
-    "version": "12.0.1.0.0",
+    "version": "13.0.1.0.0",
     "category": "Accounting",
-    "author": "Jarsa Sistemas, Vauxoo",
+    "author": "Jarsa Sistemas, Vauxoo, MtNet",
     "website": "https://www.jarsa.com.mx",
     "depends": ["account_cancel"],
     "summary": """Link currency rate difference moves to the

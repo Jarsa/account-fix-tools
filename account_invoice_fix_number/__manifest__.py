@@ -3,9 +3,9 @@
 
 {
     "name": "Accounting - Invoice Fix Number",
-    "version": "12.0.0.1.0",
+    "version": "13.0.0.1.0",
     "category": "Accounting",
-    "author": "Jarsa Sistemas",
+    "author": "Jarsa Sistemas,MtNet",
     "website": "https://www.jarsa.com.mx",
     "depends": ["account"],
     "summary": "This module assign a fix number based in the invoice number",

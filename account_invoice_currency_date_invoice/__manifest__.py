@@ -5,10 +5,10 @@
     'summary': '''
         Validate invoices with currency rate of invoice date if date is defined
         ''',
-    'version': '12.0.1.0.0',
+    'version': '13.0.1.0.0',
     'category': 'Account',
     'website': 'https://www.jarsa.com.mx/',
-    'author': 'Jarsa Sistemas',
+    'author': 'Jarsa Sistemas,MtNet',
     'license': 'AGPL-3',
     'installable': True,
     'depends': [
