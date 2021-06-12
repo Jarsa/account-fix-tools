@@ -10,7 +10,8 @@
             </t>
         </button>
         <div class="o_dropdown_menu dropdown-menu o_filter_menu" role="menu">
-            <t t-foreach="[{'name': 'Company Currency'},{'name': 'USD'}, {'name': 'MXN'}]" t-as="c">
+            <a role="menuitem" class="ml4 dropdown-item-text">Company Currency</a>
+            <t t-foreach="options.get('currencies')" t-as="c">
                 <a role="menuitem" class="ml4 dropdown-item-text"><t t-esc="c.get('name')"/></a>
             </t>
         </div>
@@ -18,9 +19,11 @@
 
     <template id="search_template" inherit_id="account_reports.search_template">
         <xpath expr="//div[hasclass('o_account_reports_filter_journals')]" position="after">
-            <div class="btn-group o_dropdown o_account_reports_filter_currencies">
-                <t t-call="account_aged_by_currency_report.search_template_currencies"/>
-            </div>
+            <t t-if="options.get('currencies')">
+                <div class="btn-group o_dropdown o_account_reports_filter_currencies">
+                    <t t-call="account_aged_by_currency_report.search_template_currencies"/>
+                </div>
+            </t>
         </xpath>
     </template>
 
