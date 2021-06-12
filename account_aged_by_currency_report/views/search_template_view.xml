@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="search_template_currencies">
+        <button type="button" class="o_dropdown_toggler_btn btn btn-secondary dropdown-toggle" data-toggle="dropdown">
+            <span class="fa fa-money"/>
+            Currency:
+            <t>
+                All
+            </t>
+        </button>
+        <div class="o_dropdown_menu dropdown-menu o_filter_menu" role="menu">
+            <t t-foreach="[{'name': 'Company Currency'},{'name': 'USD'}, {'name': 'MXN'}]" t-as="c">
+                <a role="menuitem" class="ml4 dropdown-item-text"><t t-esc="c.get('name')"/></a>
+            </t>
+        </div>
+    </template>
+
+    <template id="search_template" inherit_id="account_reports.search_template">
+        <xpath expr="//div[hasclass('o_account_reports_filter_journals')]" position="after">
+            <div class="btn-group o_dropdown o_account_reports_filter_currencies">
+                <t t-call="account_aged_by_currency_report.search_template_currencies"/>
+            </div>
+        </xpath>
+    </template>
+
+</odoo>
