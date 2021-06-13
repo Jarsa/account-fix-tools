@@ -5,14 +5,16 @@
         <button type="button" class="o_dropdown_toggler_btn btn btn-secondary dropdown-toggle" data-toggle="dropdown">
             <span class="fa fa-money"/>
             Currency:
-            <t>
-                All
-            </t>
+            <t t-esc="options.get('selected_currency_name')"/>
         </button>
         <div class="o_dropdown_menu dropdown-menu o_filter_menu" role="menu">
-            <a role="menuitem" class="ml4 dropdown-item-text">Company Currency</a>
+            <a role="menuitem" class="dropdown-item js_account_reports_one_choice_filter" data-filter="selected_currency" data-id="company_currency">
+                Company Currency
+            </a>
             <t t-foreach="options.get('currencies')" t-as="c">
-                <a role="menuitem" class="ml4 dropdown-item-text"><t t-esc="c.get('name')"/></a>
+                <a role="menuitem" class="dropdown-item js_account_reports_one_choice_filter" data-filter="selected_currency" t-att-data-id="c.get('id')" >
+                    <t t-esc="c.get('name')"/>
+                </a>
             </t>
         </div>
     </template>
