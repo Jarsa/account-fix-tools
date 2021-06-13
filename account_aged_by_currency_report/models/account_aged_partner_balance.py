@@ -19,7 +19,7 @@ class ReportAccountAgedPartner(models.AbstractModel):
     def _init_filter_currencies(self, options, previous_options=None):
         if not self.filter_currencies:
             return
-        selected_currency = previous_options.get('selected_currency')
+        selected_currency = previous_options and previous_options.get('selected_currency')
         if selected_currency and isinstance(selected_currency, int):
             options['selected_currency_name'] = self.env['res.currency'].browse(selected_currency).name
             options['selected_currency'] = selected_currency
