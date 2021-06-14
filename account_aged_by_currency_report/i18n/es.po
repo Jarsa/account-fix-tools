@@ -1,0 +1,58 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* account_aged_by_currency_report
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 14.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-06-13 18:31+0000\n"
+"PO-Revision-Date: 2021-06-13 13:32-0500\n"
+"Last-Translator: Jesús Alan Ramos Rodríguez <alan.ramos@jarsa.com.mx>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"Language: es\n"
+"X-Generator: Poedit 3.0\n"
+
+#. module: account_aged_by_currency_report
+#: model_terms:ir.ui.view,arch_db:account_aged_by_currency_report.search_template_currencies
+msgid ""
+"<span class=\"fa fa-money\"/>\n"
+"            Currency:"
+msgstr ""
+"<span class=\"fa fa-money\"/>\n"
+"            Moneda:"
+
+#. module: account_aged_by_currency_report
+#: model:ir.model,name:account_aged_by_currency_report.model_account_aged_partner
+msgid "Aged Partner Balances"
+msgstr "Saldos vencidos de empresa"
+
+#. module: account_aged_by_currency_report
+#: model_terms:ir.ui.view,arch_db:account_aged_by_currency_report.search_template_currencies
+msgid "Company Currency"
+msgstr "Moneda de la compañía"
+
+#. module: account_aged_by_currency_report
+#: code:addons/account_aged_by_currency_report/models/account_aged_partner_balance.py:0
+#, python-format
+msgid "Company currency"
+msgstr "Moneda de la compañía"
+
+#. module: account_aged_by_currency_report
+#: model:ir.model.fields,field_description:account_aged_by_currency_report.field_account_aged_partner__display_name
+msgid "Display Name"
+msgstr "Nombre mostrado"
+
+#. module: account_aged_by_currency_report
+#: model:ir.model.fields,field_description:account_aged_by_currency_report.field_account_aged_partner__id
+msgid "ID"
+msgstr "Identificación"
+
+#. module: account_aged_by_currency_report
+#: model:ir.model.fields,field_description:account_aged_by_currency_report.field_account_aged_partner____last_update
+msgid "Last Modified on"
+msgstr "Última modificación en"
