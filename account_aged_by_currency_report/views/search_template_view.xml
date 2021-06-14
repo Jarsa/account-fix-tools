@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="search_template_currencies">
+        <button type="button" class="o_dropdown_toggler_btn btn btn-secondary dropdown-toggle" data-toggle="dropdown">
+            <span class="fa fa-money"/>
+            Currency:
+            <t t-esc="options.get('selected_currency_name')"/>
+        </button>
+        <div class="o_dropdown_menu dropdown-menu o_filter_menu" role="menu">
+            <a role="menuitem" class="dropdown-item js_account_reports_one_choice_filter" data-filter="selected_currency" data-id="company_currency">
+                Company Currency
+            </a>
+            <t t-foreach="options.get('currencies')" t-as="c">
+                <a role="menuitem" class="dropdown-item js_account_reports_one_choice_filter" data-filter="selected_currency" t-att-data-id="c.get('id')" >
+                    <t t-esc="c.get('name')"/>
+                </a>
+            </t>
+        </div>
+    </template>
+
+    <template id="search_template" inherit_id="account_reports.search_template">
+        <xpath expr="//div[hasclass('o_account_reports_filter_journals')]" position="after">
+            <t t-if="options.get('currencies')">
+                <div class="btn-group o_dropdown o_account_reports_filter_currencies">
+                    <t t-call="account_aged_by_currency_report.search_template_currencies"/>
+                </div>
+            </t>
+        </xpath>
+    </template>
+
+</odoo>
