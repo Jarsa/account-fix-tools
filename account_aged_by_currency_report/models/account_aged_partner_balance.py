@@ -40,5 +40,9 @@ class ReportAccountAgedPartner(models.AbstractModel):
                 "WHERE account.internal_type = 'payable'",
                 "WHERE account.internal_type = 'payable' AND "
                 "account_move_line.currency_id = %s" % selected_currency
+            ).replace(
+                "WHERE account.internal_type = 'receivable'",
+                "WHERE account.internal_type = 'receivable' AND "
+                "account_move_line.currency_id = %s" % selected_currency
             )
         return res
