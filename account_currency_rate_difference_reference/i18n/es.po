@@ -1,0 +1,40 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* account_currency_rate_difference_reference
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 15.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-10-25 18:30+0000\n"
+"PO-Revision-Date: 2022-10-25 18:30+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: account_currency_rate_difference_reference
+#: code:addons/account_currency_rate_difference_reference/models/account_move.py:0
+#: model:ir.model.fields,field_description:account_currency_rate_difference_reference.field_account_bank_statement_line__exchange_move_id
+#: model:ir.model.fields,field_description:account_currency_rate_difference_reference.field_account_move__exchange_move_id
+#: model:ir.model.fields,field_description:account_currency_rate_difference_reference.field_account_payment__exchange_move_id
+#, python-format
+msgid "Currency Exchange Difference Move"
+msgstr "Pólizas de Diferencial Cambiario"
+
+#. module: account_currency_rate_difference_reference
+#: model_terms:ir.ui.view,arch_db:account_currency_rate_difference_reference.view_account_move_form
+msgid "Exchange Move"
+msgstr "Póliza de Diferencial Cambiario"
+
+#. module: account_currency_rate_difference_reference
+#: model:ir.model,name:account_currency_rate_difference_reference.model_account_full_reconcile
+msgid "Full Reconcile"
+msgstr "Conciliación completa"
+
+#. module: account_currency_rate_difference_reference
+#: model:ir.model,name:account_currency_rate_difference_reference.model_account_move
+msgid "Journal Entry"
+msgstr "Asiento contable"
