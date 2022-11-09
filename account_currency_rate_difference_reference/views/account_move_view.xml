@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record model="ir.ui.view" id="view_account_move_form">
+        <field name="name">view.account.move.form</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='open_reconcile_view']" position="after">
+                <button class="oe_stat_button" type="object" name="action_currency_rate_diference"
+                        attrs="{'invisible': [('exchange_move_id', '=', False)]}"
+                        string="Exchange Move"
+                        icon="fa-files-o">
+                </button>
+                <field name="exchange_move_id" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
