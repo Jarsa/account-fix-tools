@@ -14,8 +14,8 @@ class AccountFullReconcile(models.Model):
             return res
         invoice_moves = res.reconciled_line_ids.filtered(
             lambda l: l.account_id.reconcile and l.journal_id.type in
-            ['sale', 'purchase'] and l.invoice_id.type in
-            ['in_invoice', 'out_invoice']).mapped('move_id')
+            ['sale', 'purchase'] and l.move_id.move_type in
+            ['in_invoice', 'out_invoice'])
         invoice_moves.write({
             'exchange_move_id': res.exchange_move_id.id,
         })
